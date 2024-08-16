@@ -1,9 +1,17 @@
 const express = require('express');
-const path = require('path');
 const app = express();
+const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
-const Campground = require('./models/projectCard');
+const ProjectCard = require('./models/projectCard');
+
+mongoose.connect('mongodb://localhost:27017/projectCards');
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+    console.log("Database connected");
+});
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
@@ -29,6 +37,16 @@ app.get('/YelpCapm', (req, res) => {
 app.get('/WeeDex', (req, res) => {
     res.render('home')
 });
+
+app.get('/makeProjectCard', async(req,res)=>{
+    const card = new ProjectCard({
+        projectName: 'Test1111111111111',
+        projectYear: '2999',
+        projecthref: '/resume'
+    })
+    await card.save();
+    res.send(card)
+})
 
 app.listen(3333, () => {
     console.log('Serving on port 3000')

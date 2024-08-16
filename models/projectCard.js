@@ -5,3 +5,5 @@ const ProjectCardSchema = new schema({
     projectYear: String,
     projecthref: String
 })
+
+module.exports = mongoose.model('ProjectCard', ProjectCardSchema);
