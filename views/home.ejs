@@ -7,8 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="home.css">
 </head>
-<body class="bg-gray-100">
-    <nav class="text-white py-4" style="background-color: #1E1E2E;">
+<body class="bg-gray-500">
+    <nav class="fixed top-0 w-full z-50 text-white py-4" style="background-color: #1E1E2E;">
         <div class="container mx-auto flex justify-between items-center">
             <div>
                 <a href="#" class="text-lg font-bold">WeeProfile</a>
@@ -21,12 +21,14 @@
             </div>
         </div>
     </nav>
+    <nav class="top-0 w-full py-4" style="background-color: #1E1E2E;">
+        <p class="text-lg font-bold">WeeProfile</p>
+    </nav>
 
-    <section class="hero-image h-screen flex items-center justify-center bg-cover" style="background-image: url('https://images.pexels.com/photos/414144/pexels-photo-414144.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')">
+    <section class=" hero-image h-screen flex items-center justify-center bg-cover py-8" style="background-image: url('https://images.pexels.com/photos/414144/pexels-photo-414144.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')">
         <div class="text-center text-white">
             <h1 class="text-5xl font-bold mb-10">Select Project</h1>
-
-            <div class="container mx-auto ">
+            <div class="container mx-auto mb-10">
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     <a href="/resume" class="p-6 rounded-lg shadow-md project-card">
                         <h3 class="text-xl font-bold mb-2">Resume</h3>
@@ -60,16 +62,79 @@
                     </a>
                 </div>                
             </div>
-
+            <div class="flex justify-center space-x-8 mt-6">
+                <button id="addProjectBtn" class="mx-3 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    Add Project
+                </button>
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Delete Project
+                </button>
+            </div>        
         </div>
-    </section>   
-        
+    </section>          
+    
+    <div id="projectModal" class="fixed hidden z-10 inset-0 flex items-center justify-center" style="background-color: rgba(0, 0, 0, 0.5);">
+        <div class="bg-gray-900 px-4 py-5 sm:p-6 text-white rounded-lg">
+            <h3 class="text-lg leading-6 font-medium  mb-4">Add New Project</h3>
+            <form action="/projectCard" method="POST">
+                <div class="mb-4">
+                    <label for="projectName" class="block text-sm font-medium">Project Name</label>
+                    <input name="projectCard[projectName]" type="text" id="projectName" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900">
+                </div>
+                <div class="mb-4">
+                    <label for="projectYear" class="block text-sm font-medium">Project Year</label>
+                    <input name="projectCard[projectYear]" type="text" id="projectYear" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900">
+                </div>
+                <div class="mb-4">
+                    <label for="projecthref" class="block text-sm font-medium">Project HRef</label>
+                    <input name="projectCard[projecthref]" type="text" id="projecthref" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900">
+                </div>
+
+                <div class="flex justify-end space-x-2">
+                    <button type="button" id="cancelBtn" class="mx-3 bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded">
+                        Add Project
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="fixed z-10 inset-0 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="fixed inset-0 "></div>    
+            
+        </div>
+    </div>
+
     <footer class="text-white py-8" style="background-color: #1E1E2E;">
         <div class="container mx-auto text-center">
             <p>&copy; 2024 WeeProfile. All rights reserved.</p>
         </div>
     </footer>
+    
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+<script>
+    const addProjectBtn = document.getElementById('addProjectBtn');
+    const projectModal = document.getElementById('projectModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    addProjectBtn.addEventListener('click', () => {
+        projectModal.classList.remove('hidden');
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        projectModal.classList.add('hidden');
+    });
+
+    // Optional: Close modal by clicking outside the modal content
+    window.addEventListener('click', (event) => {
+        if (event.target == projectModal) {
+            projectModal.classList.add('hidden');
+        }
+    });
+</script>
 </html>

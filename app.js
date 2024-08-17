@@ -20,9 +20,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.render('home')
+    res.redirect('/home')
 });
-app.get('/home', (req, res) => {
+app.get('/home', async(req, res) => {
+    const cards = await ProjectCard.find({});
+    /* console.log(cards); */
     res.render('home')
 });
 app.get('/resume', (req, res) => {
@@ -38,7 +40,14 @@ app.get('/WeeDex', (req, res) => {
     res.render('home')
 });
 
-app.get('/makeProjectCard', async(req,res)=>{
+app.post('/projectCard', async (req, res) => {
+    const card = new ProjectCard(req.body.projectCard);
+    console.log(card);
+    await card.save();
+    res.redirect('/home');
+});
+
+/* app.get('/makeProjectCard', async(req,res)=>{
     const card = new ProjectCard({
         projectName: 'Test1111111111111',
         projectYear: '2999',
@@ -46,7 +55,7 @@ app.get('/makeProjectCard', async(req,res)=>{
     })
     await card.save();
     res.send(card)
-})
+}) */
 
 app.listen(3333, () => {
     console.log('Serving on port 3000')
