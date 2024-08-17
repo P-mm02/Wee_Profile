@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 app.get('/home', async(req, res) => {
     const cards = await ProjectCard.find({});
     /* console.log(cards); */
-    res.render('home')
+    res.render('home',{cards})
 });
 app.get('/resume', (req, res) => {
     res.render('resume')
@@ -47,6 +47,15 @@ app.post('/projectCard', async (req, res) => {
     res.redirect('/home');
 });
 
+app.post('/deleteProject', async (req, res) => {
+    const selectedCards = req.body.selectedCards
+    const result = await ProjectCard.deleteMany({
+        _id: { $in: selectedCards }
+    });
+    console.log(`Deleted ${result.deletedCount} project: ` + selectedCards);
+    res.redirect('/home');
+});
+
 /* app.get('/makeProjectCard', async(req,res)=>{
     const card = new ProjectCard({
         projectName: 'Test1111111111111',
@@ -58,5 +67,5 @@ app.post('/projectCard', async (req, res) => {
 }) */
 
 app.listen(3333, () => {
-    console.log('Serving on port 3000')
+    console.log('Serving on port 3333')
 })
