@@ -1,13 +1,3 @@
-const deleteProjectBtn = document.getElementById('deleteProjectBtn')
-const deleteProjectForm = document.getElementById('deleteProjectForm')
-const projectCardsCon = document.getElementById('projectCardsCon')
-
-
-deleteProjectBtn.addEventListener('click', () => {
-    deleteProjectForm.classList.remove('hidden')
-    projectCardsCon.classList.add('hidden')
-})
-
 function toggleCheckbox(cardId) {
     const checkbox = document.getElementById(`card-${cardId}`)
     const card = checkbox.closest('button')

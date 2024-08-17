@@ -18,14 +18,36 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 app.get('/', (req, res) => {
     res.redirect('/home')
 });
 app.get('/home', async(req, res) => {
     const cards = await ProjectCard.find({});
-    /* console.log(cards); */
     res.render('home',{cards})
+});
+app.get('/deleteProject', async(req, res) => {
+    const cards = await ProjectCard.find({});
+    res.render('deleteProject',{cards})
+});
+app.get('/editProject', async(req, res) => {
+    const cards = await ProjectCard.find({}); 
+    res.render('editProject',{cards,cardSelected:cards[0],script:"<script></script>"})   
+});
+app.get('/editProject/:id', async(req, res) => {
+    const cards = await ProjectCard.find({}); 
+    cardSelected = await ProjectCard.findById(req.params.id)
+    res.render('editProject', {
+        cards,
+        cardSelected,
+        script: "<script>document.getElementById('projectCardEditCon').classList.remove('hidden');</script>"
+    });
+    
+});
+app.put('/editProject/:id', async (req, res) => {
+    await ProjectCard.findByIdAndUpdate(req.params.id, { ...req.body.projectCard });
+    res.redirect(`/editProject`)
 });
 app.get('/resume', (req, res) => {
     res.render('resume')
