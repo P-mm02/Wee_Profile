@@ -1,0 +1,53 @@
+<% layout('layouts/boilerplate')%>
+
+<form id="deleteProjectForm" action="/deleteProject?_method=delete" method="POST">
+    <section class=" hero-image h-auto flex items-center justify-center bg-cover py-8">
+        <div class="text-center text-white">
+            <h1 class="text-5xl font-bold mb-10">Select the project you want to delete!!!</h1>
+            <div class="container mx-auto mb-10">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <a href="/resume" class="p-6 rounded-lg shadow-md project-card">
+                        <h3 class="text-xl font-bold mb-2">Resume</h3>
+                        <h3 class="text-xl font-semibold mb-2">2024</h3>
+                    </a>
+                    <a href="http://" class="p-6 rounded-lg shadow-md project-card">
+                        <h3 class="text-xl font-bold mb-2">CV</h3>
+                        <h3 class="text-xl font-semibold mb-2">2024</h3>
+
+                    </a>
+                    <a href="http://" class="p-6 rounded-lg shadow-md project-card">
+                        <h3 class="text-xl font-bold mb-2">YelpCamp</h3>
+                        <h3 class="text-xl font-semibold mb-2">2024</h3>
+                    </a>
+                    <a href="http://" class="p-6 rounded-lg shadow-md project-card">
+                        <h3 class="text-xl font-bold mb-2">WeeDex (โปรเจคจบ)</h3>
+                        <h3 class="text-xl font-semibold mb-2">2022-2023</h3>
+                    </a>
+                    <a href="http://" class="p-6 rounded-lg shadow-md project-card">
+                        <h3 class="text-xl font-bold mb-2">SwipSwap</h3>
+                        <h3 class="text-xl font-semibold mb-2">2023-2024</h3>
+                    </a>
+                    <% cards.forEach(card => { %>                            
+                        <button type="button" class="p-6 rounded-lg shadow-md project-card relative" onclick="toggleCheckbox('<%= card._id %>')">
+                            <input type="checkbox" id="card-<%= card._id %>" name="selectedCards[]" value="<%= card._id %>" class="hidden form-checkbox text-blue-600">
+                            <h3 class="text-xl font-bold mb-2"><%= card.projectName %></h3>
+                            <h3 class="text-xl font-semibold mb-2"><%= card.projectYear %></h3>
+                        </button>
+                    <% }); %>
+                    
+                </div>                
+            </div>
+            <button type="submit" class="mx-2 bg-red-700 text-white font-bold py-2 px-4 rounded">
+                Submit Selected Projects
+            </button>
+            <a href="/home">
+                <button type="button" class="mx-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    Cancel
+                </button>  
+            </a>
+               
+        </div>
+    </section>        
+</form>                 
+
+<script src="deleteProject.js"></script>

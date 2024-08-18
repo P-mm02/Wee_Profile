@@ -4,6 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const ProjectCard = require('./models/projectCard');
+const ejsMate = require('ejs-mate');
 
 mongoose.connect('mongodb://localhost:27017/projectCards');
 
@@ -13,6 +14,7 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
+app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')));
@@ -29,16 +31,16 @@ app.get('/home', async(req, res) => {
 });
 app.get('/deleteProject', async(req, res) => {
     const cards = await ProjectCard.find({});
-    res.render('deleteProject',{cards})
+    res.render('projectCards/deleteProject',{cards})
 });
 app.get('/editProject', async(req, res) => {
     const cards = await ProjectCard.find({}); 
-    res.render('editProject',{cards,cardSelected:cards[0],script:"<script></script>"})   
+    res.render('projectCards/editProject',{cards,cardSelected:cards[0],script:"<script></script>"})   
 });
 app.get('/editProject/:id', async(req, res) => {
     const cards = await ProjectCard.find({}); 
     cardSelected = await ProjectCard.findById(req.params.id)
-    res.render('editProject', {
+    res.render('projectCards/editProject', {
         cards,
         cardSelected,
         script: "<script>document.getElementById('projectCardEditCon').classList.remove('hidden');</script>"
@@ -64,17 +66,15 @@ app.get('/WeeDex', (req, res) => {
 
 app.post('/projectCard', async (req, res) => {
     const card = new ProjectCard(req.body.projectCard);
-    console.log(card);
     await card.save();
     res.redirect('/home');
 });
 
-app.post('/deleteProject', async (req, res) => {
+app.delete('/deleteProject', async (req, res) => {
     const selectedCards = req.body.selectedCards
-    const result = await ProjectCard.deleteMany({
+    await ProjectCard.deleteMany({
         _id: { $in: selectedCards }
     });
-    console.log(`Deleted ${result.deletedCount} project: ` + selectedCards);
     res.redirect('/home');
 });
 

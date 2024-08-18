@@ -1,0 +1,81 @@
+<% layout('layouts/boilerplate')%>
+
+<div id="projectCardEditCon" class="fixed hidden z-10 inset-0 flex items-center justify-center" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="bg-gray-900 px-4 py-5 sm:p-6 text-white rounded-lg">
+        <h3 class="text-lg leading-6 font-medium  mb-4">Add New Project</h3>
+        <form action="/editProject/<%= cardSelected._id %>?_method=PUT" method="POST">
+            <div class="mb-4">
+                <label for="projectName" class="block text-sm font-medium">Project Name</label>
+                <input name="projectCard[projectName]" type="text" id="projectName" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900" value="<%= cardSelected.projectName %>">
+            </div>
+            <div class="mb-4">
+                <label for="projectYear" class="block text-sm font-medium">Project Year</label>
+                <input name="projectCard[projectYear]" type="text" id="projectYear" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900" value="<%= cardSelected.projectYear %>">
+            </div>              
+            <div class="mb-4">
+                <label for="projecthref" class="block text-sm font-medium">Project HRef</label>
+                <input name="projectCard[projecthref]" type="text" id="projecthref" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900" value="<%= cardSelected.projecthref %>">
+            </div>
+
+            <div class="flex justify-end space-x-2">
+                <button type="button" id="cancelBtn" class="mx-3 bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded">
+                    Cancel
+                </button>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<% if (script) { %>
+    <%- script %>
+<% } %>
+<script src="/editProject.js"></script>
+
+<section id="projectCardsCon" class="hero-image h-auto flex items-center justify-center bg-cover py-8">
+    <div class="text-center text-white">
+        <h1 class="text-5xl font-bold mb-10">Select the project you want to edit.</h1>
+        <div class="container mx-auto mb-10">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <a href="/resume" class="p-6 rounded-lg shadow-md project-card">
+                    <h3 class="text-xl font-bold mb-2">Resume</h3>
+                    <h3 class="text-xl font-semibold mb-2">2024</h3>
+                </a>
+                <a href="http://" class="p-6 rounded-lg shadow-md project-card">
+                    <h3 class="text-xl font-bold mb-2">CV</h3>
+                    <h3 class="text-xl font-semibold mb-2">2024</h3>
+
+                </a>
+                <a href="http://" class="p-6 rounded-lg shadow-md project-card">
+                    <h3 class="text-xl font-bold mb-2">YelpCamp</h3>
+                    <h3 class="text-xl font-semibold mb-2">2024</h3>
+                </a>
+                <a href="http://" class="p-6 rounded-lg shadow-md project-card">
+                    <h3 class="text-xl font-bold mb-2">WeeDex (โปรเจคจบ)</h3>
+                    <h3 class="text-xl font-semibold mb-2">2022-2023</h3>
+                </a>
+                <a href="http://" class="p-6 rounded-lg shadow-md project-card">
+                    <h3 class="text-xl font-bold mb-2">SwipSwap</h3>
+                    <h3 class="text-xl font-semibold mb-2">2023-2024</h3>
+                </a>
+                <% cards.forEach(card => { %>
+                    <form action="/editProject/<%= card._id %>" method="get" class="">
+                    <button type="submit" class="w-full h-full p-6 rounded-lg shadow-md project-card">
+                        <h3 class="text-xl font-bold mb-2"><%= card.projectName %></h3>
+                        <h3 class="text-xl font-semibold mb-2"><%= card.projectYear %></h3>
+                    </button>
+                    </form>
+                <% }); %>
+                
+            </div>                
+        </div>
+        <div class="flex justify-center space-x-8 mt-6">                
+            <a href="/home">
+                <button type="button"class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    Back
+                </button>
+            </a>
+        </div>        
+    </div>
+</section>
