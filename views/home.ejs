@@ -27,15 +27,19 @@
                     <h3 class="text-xl font-semibold mb-2">2023-2024</h3>
                 </a>
                 <% cards.forEach(card => { %>                        
-                    <a href="<%= card.projecthref %>" class="p-6 rounded-lg shadow-md project-card">
-                        <h3 class="text-xl font-bold mb-2"><%= card.projectName %></h3>
-                        <h3 class="text-xl font-semibold mb-2"><%= card.projectYear %></h3>
+                    <a href="<%= card.projecthref %>" class="p-6 rounded-lg shadow-md project-card ">
+                        <h3 class="text-xl font-bold mb-2 break-all"><%= card.projectName %></h3>
+                        <div class="flex justify-center">
+                            <h3 class="text-xl font-semibold mb-2"><%= new Date(card.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></h3>
+                            <p class="text-xl font-semibold mx-2"> - </p>
+                            <h3 class="text-xl font-semibold mb-2"><%= new Date(card.endDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></h3>
+                        </div>
                     </a>
                 <% }); %>
                 
             </div>                
         </div>
-        <div class="flex justify-center space-x-8 mt-6">
+        <div class="flex justify-center space-x-8 my-8">
             <button id="addProjectBtn" class="mx-3 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                 Add Project
             </button>
@@ -62,8 +66,12 @@
                 <input name="projectCard[projectName]" type="text" id="projectName" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900" required>
             </div>
             <div class="mb-4">
-                <label for="projectYear" class="block text-sm font-medium">Project Year</label>
-                <input name="projectCard[projectYear]" type="text" id="projectYear" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900" required>
+                <label for="startDate" class="block text-sm font-medium">Start Date</label>
+                <input type="date" id="startDate" name="projectCard[startDate]" class="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900" required>
+            </div>
+            <div class="mb-4">
+                <label for="endDate" class="block text-sm font-medium">End Date</label>
+                <input type="date" id="endDate" name="projectCard[endDate]" class="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900" required>
             </div>              
             <div class="mb-4">
                 <label for="projecthref" class="block text-sm font-medium">Project HRef</label>

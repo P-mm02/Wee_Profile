@@ -1,0 +1,80 @@
+<% layout('layouts/boilerplate')%>
+
+<section class="container mx-auto my-8 p-4 bg-gray-700 rounded-lg shadow-md text-white w-1/2 border border-gray-800">
+    <h2 class="text-2xl font-bold mb-6">Submit Your Review</h2>
+    <form action="/reviews" method="post">
+        <div class="mb-4">
+            <label for="name" class="block text-sm font-medium ">Name</label>
+            <input type="text" id="name" name="reviews[name]" class="bg-gray-600 mt-1 p-2 border border-gray-400 rounded w-full " required>
+        </div>
+        <div class="mb-4">
+            <label for="email" class="block text-sm font-medium ">Email</label>
+            <input type="email" id="email" name="reviews[email]" class="bg-gray-600 mt-1 p-2 border border-gray-400 rounded w-full " required>
+        </div>
+        <div class="mb-4">
+            <label for="review" class="block text-sm font-medium ">Review</label>
+            <textarea id="review" name="reviews[review]" rows="4" class="bg-gray-600 mt-1 p-2 border border-gray-400 rounded w-full " required></textarea>
+        </div>
+        <div class="mb-4">
+            <label for="rating" class="block text-sm font-medium ">Rating</label>
+            <input type="range" min="1" max="5" id="rating" name="reviews[rating]" class="" required></textarea>
+        </div>
+                
+        <!-- <div class="mb-4">
+            <style>
+                input[type="radio"]:checked ~ label {
+                    color: #f59e0b; /* Tailwind's yellow-500 color */
+                }
+            </style>
+            
+            <label for="rating" class="block text-sm font-medium mb-2">Rating</label>
+            <div class="flex flex-row-reverse">
+                <input type="radio" id="star5" name="rating" value="5" class="hidden" />
+                <label for="star5" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
+        
+                <input type="radio" id="star4" name="rating" value="4" class="hidden" />
+                <label for="star4" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
+        
+                <input type="radio" id="star3" name="rating" value="3" class="hidden" />
+                <label for="star3" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
+        
+                <input type="radio" id="star2" name="rating" value="2" class="hidden" />
+                <label for="star2" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
+        
+                <input type="radio" id="star1" name="rating" value="1" class="hidden" />
+                <label for="star1" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
+            </div>
+        </div> -->
+
+
+               
+        
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded">
+            Submit Review
+        </button>
+    </form>
+</section>
+
+<section class="container mx-auto my-8 p-4 bg-gray-700 rounded-lg shadow-md text-white border border-gray-800">
+    <h2 class="text-2xl font-bold mb-6">People's reviews</h2>
+    
+    <% reviews.forEach(review => { %>
+        <div class="mb-6">
+            <div class="flex items-center mb-2 space-x-3">
+                <div class="bg-blue-500 rounded-full h-12 w-12 flex items-center justify-center mr-2">
+                    <span class="text-xl font-bold">JD</span>
+                </div>
+                <div class="">
+                    <h3 class="text-xl font-semibold"><%= review.name %></h3>
+                    <p class="text-sm "><%= new Date(review.createdAt).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></p>
+                </div>
+                <div class="">
+                    <h3 class="ml-4 text-xl font-semibold">Rating: <%= review.rating %></h3>
+                </div>
+            </div>
+            <p class="">
+                <%= review.review %>
+            </p>
+        </div>
+    <% }); %>
+</section>

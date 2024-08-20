@@ -31,8 +31,12 @@
                         <button type="button" class="p-6 rounded-lg shadow-md project-card relative" onclick="toggleCheckbox('<%= card._id %>')">
                             <input type="checkbox" id="card-<%= card._id %>" name="selectedCards[]" value="<%= card._id %>" class="hidden form-checkbox text-blue-600">
                             <h3 class="text-xl font-bold mb-2"><%= card.projectName %></h3>
-                            <h3 class="text-xl font-semibold mb-2"><%= card.projectYear %></h3>
-                        </button>
+                            <div class="flex justify-center">
+                                <h3 class="text-xl font-semibold mb-2"><%= new Date(card.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></h3>
+                                <p class="text-xl font-semibold mx-2"> - </p>
+                                <h3 class="text-xl font-semibold mb-2"><%= new Date(card.endDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></h3>
+                            </div>
+                            </button>
                     <% }); %>
                     
                 </div>                

@@ -4,10 +4,11 @@ const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const { ProjectCardSchema } = require('./schemas.js');
 const catchAsync = require('./utils/catchAsync');
 const ProjectCard = require('./models/projectCard');
+const { ProjectCardSchema } = require('./schemas.js');
 const ExpressError = require('./utils/ExpressError');
+const Review = require('./models/review')
 
 mongoose.connect('mongodb://localhost:27017/projectCards');
 
@@ -59,6 +60,15 @@ app.get('/editProject/:id', catchAsync( async(req, res) => {
         cardSelected,
         script: "<script>document.getElementById('projectCardEditCon').classList.remove('hidden');</script>"
     });
+}));
+
+app.get('/reviews', catchAsync( async(req, res) => {
+    const reviews = await Review.find({}).sort({ createdAt: -1 })
+    res.render('reviews',{reviews})
+}));
+app.post('/reviews', catchAsync( async(req, res) => {
+    await new Review(req.body.reviews).save();
+    res.redirect('/reviews')
 }));
 
 app.get('/resume', (req, res) => {

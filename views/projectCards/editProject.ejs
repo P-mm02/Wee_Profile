@@ -9,8 +9,12 @@
                 <input name="projectCard[projectName]" type="text" id="projectName" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900" value="<%= cardSelected.projectName %>" required>
             </div>
             <div class="mb-4">
-                <label for="projectYear" class="block text-sm font-medium">Project Year</label>
-                <input name="projectCard[projectYear]" type="text" id="projectYear" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900" value="<%= cardSelected.projectYear %>" required>
+                <label for="startDate" class="block text-sm font-medium">Start Date</label>
+                <input type="date" id="startDate" name="projectCard[startDate]" class="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900" value="<%= cardSelected.startDate %>" required>
+            </div>
+            <div class="mb-4">
+                <label for="endDate" class="block text-sm font-medium">End Date</label>
+                <input type="date" id="endDate" name="projectCard[endDate]" class="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900" value="<%= cardSelected.endDate %>" required>
             </div>              
             <div class="mb-4">
                 <label for="projecthref" class="block text-sm font-medium">Project HRef</label>
@@ -63,7 +67,8 @@
                     <form action="/editProject/<%= card._id %>" method="get" class="">
                     <button type="submit" class="w-full h-full p-6 rounded-lg shadow-md project-card">
                         <h3 class="text-xl font-bold mb-2"><%= card.projectName %></h3>
-                        <h3 class="text-xl font-semibold mb-2"><%= card.projectYear %></h3>
+                        <h3 class="text-xl font-semibold mb-2"><%= card.startDate %></h3>
+                        <h3 class="text-xl font-semibold mb-2"><%= card.endDate %></h3>
                     </button>
                     </form>
                 <% }); %>
