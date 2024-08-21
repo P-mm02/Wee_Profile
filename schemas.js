@@ -8,3 +8,12 @@ module.exports.ProjectCardSchema = Joi.object({
         projecthref: Joi.string().required()
     }).required()
 });
+
+module.exports.ReviewSchema = Joi.object({
+    reviews: Joi.object({
+        name: Joi.string().required(),
+        email: Joi.string().required(),
+        review: Joi.string().required(),
+        rating: Joi.number().required()
+    }).required()
+});

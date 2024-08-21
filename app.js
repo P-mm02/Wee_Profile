@@ -9,6 +9,8 @@ const ProjectCard = require('./models/projectCard');
 const { ProjectCardSchema } = require('./schemas.js');
 const ExpressError = require('./utils/ExpressError');
 const Review = require('./models/review')
+const { ReviewSchema } = require('./schemas.js');
+
 
 mongoose.connect('mongodb://localhost:27017/projectCards');
 
@@ -28,6 +30,16 @@ app.use(methodOverride('_method'));
 
 const validateProjectCard = (req, res, next) => {
     const { error } = ProjectCardSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
+const validateReview = (req, res, next) => {
+    const { error } = ReviewSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
@@ -66,7 +78,7 @@ app.get('/reviews', catchAsync( async(req, res) => {
     const reviews = await Review.find({}).sort({ createdAt: -1 })
     res.render('reviews',{reviews})
 }));
-app.post('/reviews', catchAsync( async(req, res) => {
+app.post('/reviews', validateReview, catchAsync( async(req, res) => {
     await new Review(req.body.reviews).save();
     res.redirect('/reviews')
 }));
@@ -109,8 +121,8 @@ app.all('*', (req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-    console.log('err: '+err)
-    console.log('err.statusCode: '+err.statusCode)
+    /* console.log('err: '+err)
+    console.log('err.statusCode: '+err.statusCode) */
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
     res.status(statusCode).render('error', { err, statusCode })
