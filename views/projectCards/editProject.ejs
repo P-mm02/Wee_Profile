@@ -10,11 +10,11 @@
             </div>
             <div class="mb-4">
                 <label for="startDate" class="block text-sm font-medium">Start Date</label>
-                <input type="date" id="startDate" name="projectCard[startDate]" class="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900" value="<%= cardSelected.startDate %>" required>
+                <input type="date" id="startDate" name="projectCard[startDate]" class="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900" value="<%= cardSelected.startDate ? cardSelected.startDate.toISOString().split('T')[0] : '' %>" required>
             </div>
             <div class="mb-4">
                 <label for="endDate" class="block text-sm font-medium">End Date</label>
-                <input type="date" id="endDate" name="projectCard[endDate]" class="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900" value="<%= cardSelected.endDate %>" required>
+                <input type="date" id="endDate" name="projectCard[endDate]" class="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900" value="<%= cardSelected.endDate ? cardSelected.endDate.toISOString().split('T')[0] : '' %>" required>
             </div>              
             <div class="mb-4">
                 <label for="projecthref" class="block text-sm font-medium">Project HRef</label>
@@ -67,8 +67,11 @@
                     <form action="/editProject/<%= card._id %>" method="get" class="">
                     <button type="submit" class="w-full h-full p-6 rounded-lg shadow-md project-card">
                         <h3 class="text-xl font-bold mb-2"><%= card.projectName %></h3>
-                        <h3 class="text-xl font-semibold mb-2"><%= card.startDate %></h3>
-                        <h3 class="text-xl font-semibold mb-2"><%= card.endDate %></h3>
+                        <div class="flex justify-center">
+                            <h3 class="text-xl font-semibold mb-2"><%= new Date(card.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></h3>
+                            <p class="text-xl font-semibold mx-2"> - </p>
+                            <h3 class="text-xl font-semibold mb-2"><%= new Date(card.endDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></h3>
+                        </div>
                     </button>
                     </form>
                 <% }); %>

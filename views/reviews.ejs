@@ -1,76 +1,87 @@
 <% layout('layouts/boilerplate')%>
 
-<section class="container mx-auto my-8 p-4 bg-gray-700 rounded-lg shadow-md text-white w-1/2 sm:w-1 border border-gray-800">
-    <h2 class="text-2xl font-bold mb-6">Submit Your Review</h2>
-    <form action="/reviews" method="post">
-        <div class="mb-4">
-            <label for="name" class="block text-sm font-medium ">Name</label>
-            <input type="text" id="name" name="reviews[name]" class="bg-gray-600 mt-1 p-2 border border-gray-400 rounded w-full " required>
-        </div>
-        <div class="mb-4">
-            <label for="email" class="block text-sm font-medium ">Email</label>
-            <input type="email" id="email" name="reviews[email]" class="bg-gray-600 mt-1 p-2 border border-gray-400 rounded w-full " required>
-        </div>
-        <div class="mb-4">
-            <label for="review" class="block text-sm font-medium ">Review</label>
-            <textarea id="review" name="reviews[review]" rows="4" class="bg-gray-600 mt-1 p-2 border border-gray-400 rounded w-full " required></textarea>
-        </div>
-        <div class="mb-4">
-            <label for="rating" class="block text-sm font-medium ">Rating</label>
-            <input type="range" min="1" max="5" id="rating" name="reviews[rating]" class="" value="5" required>
-        </div>
-                
-        <!-- <div class="mb-4">
+<div class="container mx-auto my-8 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+    <section class="container p-4 bg-gray-700 rounded-lg shadow-md text-white  sm:w-1 border border-gray-800">
+        <h2 class="text-2xl font-bold mb-6">Leave review about me or my page for future development 🙏</h2>
+        <form action="/reviews" method="post">
             <div class="mb-4">
-            <style>
-                input[type="radio"]:checked ~ label {
-                    color: #f59e0b; /* Tailwind's yellow-500 color */
-                }
-            </style>
-            <label for="rating" class="block text-sm font-medium mb-2">Rating</label>
-            <div class="flex flex-row-reverse">
-                <input type="radio" id="star5" name="reviews[rating]" value="5" class="hidden" />
-                <label for="star5" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
-
-                <input type="radio" id="star4" name="reviews[rating]" value="4" class="hidden" />
-                <label for="star4" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
-
-                <input type="radio" id="star3" name="reviews[rating]" value="3" class="hidden" />
-                <label for="star3" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
-
-                <input type="radio" id="star2" name="reviews[rating]" value="2" class="hidden" />
-                <label for="star2" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
-
-                <input type="radio" id="star1" name="reviews[rating]" value="1" class="hidden" />
-                <label for="star1" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
+                <label for="name" class="block text-sm font-medium ">Name</label>
+                <input type="text" id="name" name="reviews[name]" class="bg-gray-600 mt-1 p-2 border border-gray-400 rounded w-full " required>
             </div>
-        </div> -->
-
-
-               
-        
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded">
-            Submit Review
-        </button>
-    </form>
-</section>
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium ">Email</label>
+                <input type="email" id="email" name="reviews[email]" class="bg-gray-600 mt-1 p-2 border border-gray-400 rounded w-full " required>
+            </div>
+            <div class="mb-4">
+                <label for="review" class="block text-sm font-medium ">Review</label>
+                <textarea id="review" name="reviews[review]" rows="4" class="bg-gray-600 mt-1 p-2 border border-gray-400 rounded w-full " required></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="rating" class="block text-sm font-medium ">Rating</label>
+                <input type="range" min="1" max="5" id="rating" name="reviews[rating]" class="" value="5" required>
+            </div>
+                    
+            <!-- <div class="mb-4">
+                <div class="mb-4">
+                <style>
+                    input[type="radio"]:checked ~ label {
+                        color: #f59e0b; /* Tailwind's yellow-500 color */
+                    }
+                </style>
+                <label for="rating" class="block text-sm font-medium mb-2">Rating</label>
+                <div class="flex flex-row-reverse">
+                    <input type="radio" id="star5" name="reviews[rating]" value="5" class="hidden" />
+                    <label for="star5" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
+    
+                    <input type="radio" id="star4" name="reviews[rating]" value="4" class="hidden" />
+                    <label for="star4" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
+    
+                    <input type="radio" id="star3" name="reviews[rating]" value="3" class="hidden" />
+                    <label for="star3" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
+    
+                    <input type="radio" id="star2" name="reviews[rating]" value="2" class="hidden" />
+                    <label for="star2" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
+    
+                    <input type="radio" id="star1" name="reviews[rating]" value="1" class="hidden" />
+                    <label for="star1" class="cursor-pointer text-2xl text-gray-400 hover:text-yellow-500">★</label>
+                </div>
+            </div> -->
+            
+            <div class="flex justify-end">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded">
+                    Submit Review
+                </button>
+            </div>
+            
+            
+        </form>
+    </section>
+    <div></div>
+</div>
 
 <section class="container mx-auto my-8 p-4 bg-gray-700 rounded-lg shadow-md text-white border border-gray-800">
-    <h2 class="text-2xl font-bold mb-6">People's reviews</h2>
+    <h2 class="text-2xl font-bold mb-1">People's reviews</h2>
     
     <% reviews.forEach(review => { %>
-        <div class="mb-6">
-            <div class="flex items-center mb-2 space-x-3">
-                <div class="bg-blue-500 rounded-full h-12 w-12 flex items-center justify-center mr-2">
-                    <span class="text-xl font-bold">JD</span>
+        <div class="border-b border-gray-500 py-4">
+            <div class="flex mb-2 justify-between">                
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-500 rounded-full h-12 w-12 flex items-center justify-center mr-2">
+                        <span class="text-xl font-bold">JD</span>
+                    </div>
+                    <div class="">
+                        <h3 class="text-xl font-semibold break-all"><%= review.name %></h3>
+                        <p class="text-sm"><%= new Date(review.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' ' + new Date(review.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) %></p>
+                    </div>                    
+                    <h3 class="ml-4 text-xl font-semibold">Rating: <%= review.rating %></h3>                    
                 </div>
-                <div class="">
-                    <h3 class="text-xl font-semibold break-all"><%= review.name %></h3>
-                    <p class="text-sm"><%= new Date(review.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' ' + new Date(review.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) %></p>
-                </div>
-                <div class="">
-                    <h3 class="ml-4 text-xl font-semibold">Rating: <%= review.rating %></h3>
-                </div>
+                <form action="/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                    <button type="submit" class="border rounded text-white p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M6.707 5.293a1 1 0 011.414 0L10 7.172l1.879-1.879a1 1 0 111.414 1.414L11.414 8.586l1.879 1.879a1 1 0 01-1.414 1.414L10 9.414l-1.879 1.879a1 1 0 01-1.414-1.414L8.586 8.586 6.707 6.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </form>
             </div>
             <p class="break-all"> <%= review.review %> </p>
         </div>

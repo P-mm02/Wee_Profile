@@ -56,10 +56,13 @@ app.get('/home', catchAsync( async(req, res) => {
     const cards = await ProjectCard.find({});
     res.render('home',{cards})
 }));
-app.get('/deleteProject', catchAsync( async(req, res) => {
-    const cards = await ProjectCard.find({});
-    res.render('projectCards/deleteProject',{cards})
+app.post('/projectCard', validateProjectCard, catchAsync( async (req, res) => {
+
+    const card = new ProjectCard(req.body.projectCard);    
+    await card.save();
+    res.redirect('/home');
 }));
+
 app.get('/editProject', catchAsync( async(req, res) => {
     const cards = await ProjectCard.find({}); 
     res.render('projectCards/editProject',{cards,cardSelected:cards[0],script:"<script></script>"})   
@@ -73,6 +76,22 @@ app.get('/editProject/:id', catchAsync( async(req, res) => {
         script: "<script>document.getElementById('projectCardEditCon').classList.remove('hidden');</script>"
     });
 }));
+app.put('/editProject/:id', validateProjectCard, catchAsync( async (req, res) => {
+    await ProjectCard.findByIdAndUpdate(req.params.id, { ...req.body.projectCard });
+    res.redirect(`/editProject`)
+}));
+
+app.get('/deleteProject', catchAsync( async(req, res) => {
+    const cards = await ProjectCard.find({});
+    res.render('projectCards/deleteProject',{cards})
+}));
+app.delete('/deleteProject', catchAsync( async (req, res) => {
+    const selectedCards = req.body.selectedCards
+    await ProjectCard.deleteMany({
+        _id: { $in: selectedCards }
+    });
+    res.redirect('/home');
+}));
 
 app.get('/reviews', catchAsync( async(req, res) => {
     const reviews = await Review.find({}).sort({ createdAt: -1 })
@@ -81,6 +100,10 @@ app.get('/reviews', catchAsync( async(req, res) => {
 app.post('/reviews', validateReview, catchAsync( async(req, res) => {
     await new Review(req.body.reviews).save();
     res.redirect('/reviews')
+}));
+app.delete('/reviews/:id', catchAsync( async (req, res) => {
+    await Review.deleteOne({ _id: req.params.id });
+    res.redirect('/reviews');
 }));
 
 app.get('/resume', (req, res) => {
@@ -95,26 +118,6 @@ app.get('/YelpCapm', (req, res) => {
 app.get('/WeeDex', (req, res) => {
     res.render('home')
 });
-
-app.post('/projectCard', validateProjectCard, catchAsync( async (req, res) => {
-
-    const card = new ProjectCard(req.body.projectCard);    
-    await card.save();
-    res.redirect('/home');
-}));
-
-app.put('/editProject/:id', validateProjectCard, catchAsync( async (req, res) => {
-    await ProjectCard.findByIdAndUpdate(req.params.id, { ...req.body.projectCard });
-    res.redirect(`/editProject`)
-}));
-
-app.delete('/deleteProject', catchAsync( async (req, res) => {
-    const selectedCards = req.body.selectedCards
-    await ProjectCard.deleteMany({
-        _id: { $in: selectedCards }
-    });
-    res.redirect('/home');
-}));
 
 app.all('*', (req, res, next) => {    
     next(new ExpressError('Page Not Found', 404))
