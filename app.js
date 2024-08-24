@@ -5,11 +5,9 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
-const ProjectCard = require('./models/projectCard');
-const { ProjectCardSchema } = require('./schemas.js');
 const ExpressError = require('./utils/ExpressError');
-const Review = require('./models/review')
-const { ReviewSchema } = require('./schemas.js');
+const projectCard = require('./routes/projectCard')
+const reviews = require('./routes/reviews')
 
 
 mongoose.connect('mongodb://localhost:27017/projectCards');
@@ -28,95 +26,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
-const validateProjectCard = (req, res, next) => {
-    const { error } = ProjectCardSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
-
-const validateReview = (req, res, next) => {
-    const { error } = ReviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
-
+app.use('/projectCard', projectCard)
+app.use('/reviews', reviews)
 
 app.get('/', (req, res) => {
     res.redirect('/home')
 });
 app.get('/home', catchAsync( async(req, res) => {
-    const cards = await ProjectCard.find({});
-    res.render('home',{cards})
-}));
-app.post('/projectCard', validateProjectCard, catchAsync( async (req, res) => {
-
-    const card = new ProjectCard(req.body.projectCard);    
-    await card.save();
-    res.redirect('/home');
-}));
-
-app.get('/editProject', catchAsync( async(req, res) => {
-    const cards = await ProjectCard.find({}); 
-    res.render('projectCards/editProject',{cards,cardSelected:cards[0],script:"<script></script>"})   
-}));
-app.get('/editProject/:id', catchAsync( async(req, res) => {
-    const cards = await ProjectCard.find({}); 
-    cardSelected = await ProjectCard.findById(req.params.id)
-    res.render('projectCards/editProject', {
-        cards,
-        cardSelected,
-        script: "<script>document.getElementById('projectCardEditCon').classList.remove('hidden');</script>"
-    });
-}));
-app.put('/editProject/:id', validateProjectCard, catchAsync( async (req, res) => {
-    await ProjectCard.findByIdAndUpdate(req.params.id, { ...req.body.projectCard });
-    res.redirect(`/editProject`)
-}));
-
-app.get('/deleteProject', catchAsync( async(req, res) => {
-    const cards = await ProjectCard.find({});
-    res.render('projectCards/deleteProject',{cards})
-}));
-app.delete('/deleteProject', catchAsync( async (req, res) => {
-    const selectedCards = req.body.selectedCards
-    await ProjectCard.deleteMany({
-        _id: { $in: selectedCards }
-    });
-    res.redirect('/home');
-}));
-
-app.get('/reviews', catchAsync( async(req, res) => {
-    const reviews = await Review.find({}).sort({ createdAt: -1 })
-    res.render('reviews',{reviews})
-}));
-app.post('/reviews', validateReview, catchAsync( async(req, res) => {
-    await new Review(req.body.reviews).save();
-    res.redirect('/reviews')
-}));
-app.delete('/reviews/:id', catchAsync( async (req, res) => {
-    await Review.deleteOne({ _id: req.params.id });
-    res.redirect('/reviews');
+    res.redirect('/projectCard')
 }));
 
 app.get('/resume', (req, res) => {
     res.render('resume')
-});
-app.get('/CV', (req, res) => {
-    res.render('home')
-});
-app.get('/YelpCapm', (req, res) => {
-    res.render('home')
-});
-app.get('/WeeDex', (req, res) => {
-    res.render('home')
 });
 
 app.all('*', (req, res, next) => {    
