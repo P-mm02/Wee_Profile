@@ -1,0 +1,38 @@
+.project-card {
+    background-color: #1E1E2E;
+    transition: background-color 0.3s ease; /* Optional for smooth transition */
+}
+  
+.project-card:hover {
+    background-color: #32324b;
+
+}
+button:hover {
+    filter: brightness(0.9);
+}
+
+@media screen and (max-width: 800px) {
+    .projectInputCon{
+        width: 80vw ;
+    }           
+}
+@media screen and (min-width: 800px) {
+    .projectInputCon{
+        width: 60vw ;
+    }           
+}
+@media screen and (min-width: 1000px) {
+    .projectInputCon{
+        width: 50vw ;
+    }           
+}
+@media screen and (min-width: 1200px) {
+    .projectInputCon{
+        width: 40vw ;
+    }           
+}
+@media screen and (min-width: 1400px) {
+    .projectInputCon{
+        width: 30vw ;
+    }           
+}

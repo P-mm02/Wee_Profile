@@ -22,10 +22,12 @@ router.get('/', catchAsync( async(req, res) => {
 }));
 router.post('/', validateReview, catchAsync( async(req, res) => {
     await new Review(req.body.reviews).save();
+    req.flash('success', 'Successfully Add Review!');
     res.redirect('/reviews')
 }));
 router.delete('/:id', catchAsync( async (req, res) => {
     await Review.deleteOne({ _id: req.params.id });
+    req.flash('success', 'Successfully Delete Review!');
     res.redirect('/reviews');
 }));
 

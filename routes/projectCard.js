@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 const catchAsync = require('../utils/catchAsync');
 const ProjectCard = require('../models/projectCard');
 const { ProjectCardSchema } = require('../schemas.js');
@@ -22,15 +22,20 @@ router.get('/', catchAsync( async(req, res) => {
 router.post('/', validateProjectCard, catchAsync( async (req, res) => {
     const card = new ProjectCard(req.body.projectCard);    
     await card.save();
-    res.redirect('/home');
+    req.flash('success', 'Successfully Add Project!');
+    res.redirect('/projectCard');
 }));
 router.get('/edit', catchAsync( async(req, res) => {
     const cards = await ProjectCard.find({}); 
     res.render('projectCards/editProject',{cards,cardSelected:cards[0],script:"<script></script>"})   
 }));
 router.get('/edit/:id', catchAsync( async(req, res) => {
-    const cards = await ProjectCard.find({}); 
+    const cards = await ProjectCard.find({});
     cardSelected = await ProjectCard.findById(req.params.id)
+    if (!cardSelected) {
+        req.flash('error', 'Can not find that Project!');
+        return res.redirect('/projectCard/edit');
+    }
     res.render('projectCards/editProject', {
         cards,
         cardSelected,
@@ -39,6 +44,7 @@ router.get('/edit/:id', catchAsync( async(req, res) => {
 }));
 router.put('/edit/:id', validateProjectCard, catchAsync( async (req, res) => {
     await ProjectCard.findByIdAndUpdate(req.params.id, { ...req.body.projectCard });
+    req.flash('success', 'Successfully Edit Project!');
     res.redirect(`/projectCard/edit`)
 }));
 router.get('/delete', catchAsync( async(req, res) => {
@@ -50,7 +56,10 @@ router.delete('/delete', catchAsync( async (req, res) => {
     await ProjectCard.deleteMany({
         _id: { $in: selectedCards }
     });
-    res.redirect('/home');
+    req.flash('success', 'Successfully Delete Project!');
+    res.redirect('/projectCard');
 }));
 
 module.exports = router;
+
+/* Note:{ mergeParams: true } Child Router: Use child routers when you need to organize routes into modules, apply specific middleware, manage complex nested routes, or maintain clean and modular code. */

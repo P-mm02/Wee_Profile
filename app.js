@@ -4,6 +4,8 @@ const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
+const session = require('express-session');
+const flash = require('connect-flash');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const projectCard = require('./routes/projectCard')
@@ -26,15 +28,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+const sessionConfig = {
+    secret: 'WeeSecret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 10
+        /* expire: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7 */
+    }
+}
+app.use(session(sessionConfig))
+app.use(flash())
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success')
+    res.locals.error = req.flash('error');
+    next()
+})
+
 app.use('/projectCard', projectCard)
 app.use('/reviews', reviews)
 
 app.get('/', (req, res) => {
-    res.redirect('/home')
-});
-app.get('/home', catchAsync( async(req, res) => {
     res.redirect('/projectCard')
-}));
+});
 
 app.get('/resume', (req, res) => {
     res.render('resume')
