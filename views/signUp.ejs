@@ -1,0 +1,28 @@
+<% layout('layouts/boilerplate')%>
+<div class="w-full h-screen flex justify-center items-center " style="margin-top: -8vh;">
+    <div class="loginCon bg-gray-600 w-1/2 h-auto p-8 rounded-lg shadow-md text-white">
+        <h1 class="text-2xl font-bold mb-4">Sign Up</h1>
+        <form action="/signUp" method="POST">
+            <div class="mb-4">
+                <label for="username" class="block font-semibold">Username</label>
+                <input type="text" id="username" name="username" class="w-full border-gray-300 rounded-md p-2" placeholder = '8-20 character' required>
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block font-semibold">Password</label>
+                <input type="password" id="password" name="password" class="w-full border-gray-300 rounded-md p-2" placeholder = '8-20 character' required>
+            </div>
+            <div class="mb-4">
+                <label for="passwordConfirm" class="block font-semibold">Confirm Password</label>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" class="w-full border-gray-300 rounded-md p-2" placeholder = 'Enter Password again' required>
+            </div>
+            <div class="mb-4">
+                <label for="username" class="block font-semibold">Tester Token (Optional)</label>
+                <input type="text" id="username" name="username" class="w-full border-gray-300 rounded-md p-2" placeholder = 'Got some restriction withuot Tester token'>
+            </div>
+            <div class="flex justify-end">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+

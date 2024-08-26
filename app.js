@@ -55,6 +55,12 @@ app.get('/', (req, res) => {
     res.redirect('/projectCard')
 });
 
+app.get('/login', (req, res) => {
+    res.render('login')
+});
+app.get('/signUp', (req, res) => {
+    res.render('signUp')
+});
 app.get('/resume', (req, res) => {
     res.render('resume')
 });

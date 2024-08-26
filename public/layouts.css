@@ -12,27 +12,27 @@ button:hover {
 }
 
 @media screen and (max-width: 800px) {
-    .projectInputCon{
+    .projectInputCon, .loginCon{
         width: 80vw ;
     }           
 }
 @media screen and (min-width: 800px) {
-    .projectInputCon{
+    .projectInputCon, .loginCon {
         width: 60vw ;
     }           
 }
 @media screen and (min-width: 1000px) {
-    .projectInputCon{
+    .projectInputCon, .loginCon{
         width: 50vw ;
     }           
 }
 @media screen and (min-width: 1200px) {
-    .projectInputCon{
+    .projectInputCon, .loginCon{
         width: 40vw ;
     }           
 }
 @media screen and (min-width: 1400px) {
-    .projectInputCon{
+    .projectInputCon, .loginCon{
         width: 30vw ;
     }           
 }
