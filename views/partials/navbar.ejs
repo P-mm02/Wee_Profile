@@ -1,18 +1,28 @@
-<nav class="fixed top-0 w-full z-50 text-white py-4 shadow-lg" style="background-color: #1E1E2E;">
-    <div class="container mx-auto flex justify-between items-center">
-        <div>
+<nav class="sticky top-0 w-full z-50 text-white shadow-lg" style="background-color: #1E1E2E;">
+    <div class="mx-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 items-center">
+        <div class="flex justify-center ">
             <a href="/projectCard" class="text-lg font-bold">WeeProfile</a>
         </div>
-        <div>
+        <div class="flex justify-center ">
             <a href="/projectCard" class="px-4 py-4 hover:bg-gray-700 ">Home</a>
             <a href="#" class="px-4 py-4 hover:bg-gray-700">About</a>
-            <a href="/reviews" class="px-4 py-4 hover:bg-gray-700">Reviews</a>
-            <a href="/signUp" class="px-4 py-4 hover:bg-gray-700">Sign Up</a>
-            <a href="/login" class="px-4 py-4 hover:bg-gray-700">Login</a>
-
+            <a href="/reviews" class="px-4 py-4 hover:bg-gray-700">Reviews</a>            
         </div>
+        <div class="flex justify-end items-center space-x-3">
+            <% if (!currentUser) { %>
+            <a href="/users/signUp" class="px-4 py-4 hover:bg-gray-700">Sign Up</a>
+            <a href="/users/login" class="px-4 py-4 hover:bg-gray-700">Login</a>
+            <% } else { %>
+            <div class="flex justify-center items-end flex-col">
+                <h1 class="text-lg">Username : <%= currentUser.username %></h2>
+                <h1 class="text-lg">Status : Admin</h2> 
+            </div>
+            <form action="/users/logout" method="post">
+                <button type="submit" class="hover:bg-gray-700 text-white font-bold py-4 px-4 rounded">
+                    Logout
+                </button>
+            </form>
+            <% } %>           
+        </div>       
     </div>
-</nav>
-<nav class="top-0 w-full py-4" style="background-color: #1E1E2E;">
-    <p class="text-lg font-bold">WeeProfile</p>
 </nav>

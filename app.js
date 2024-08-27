@@ -6,10 +6,15 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
+const User = require('./models/user')
+
 const projectCard = require('./routes/projectCard')
 const reviews = require('./routes/reviews')
+const users = require('./routes/users')
 
 
 mongoose.connect('mongodb://localhost:27017/projectCards');
@@ -34,7 +39,7 @@ const sessionConfig = {
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
-        maxAge: 1000 * 60 * 10
+        maxAge: 1000 * 60 * 30
         /* expire: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7 */
     }
@@ -42,7 +47,15 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 app.use(flash())
 
-app.use((req, res, next) => {
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser((User.deserializeUser()))
+
+app.use((req, res, next) => {    
+    res.locals.currentUser = req.user
     res.locals.success = req.flash('success')
     res.locals.error = req.flash('error');
     next()
@@ -50,17 +63,13 @@ app.use((req, res, next) => {
 
 app.use('/projectCard', projectCard)
 app.use('/reviews', reviews)
+app.use('/users', users)
 
 app.get('/', (req, res) => {
     res.redirect('/projectCard')
 });
 
-app.get('/login', (req, res) => {
-    res.render('login')
-});
-app.get('/signUp', (req, res) => {
-    res.render('signUp')
-});
+
 app.get('/resume', (req, res) => {
     res.render('resume')
 });
@@ -70,8 +79,6 @@ app.all('*', (req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-    /* console.log('err: '+err)
-    console.log('err.statusCode: '+err.statusCode) */
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
     res.status(statusCode).render('error', { err, statusCode })

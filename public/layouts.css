@@ -11,27 +11,27 @@ button:hover {
     filter: brightness(0.9);
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 768px) {
     .projectInputCon, .loginCon{
         width: 80vw ;
     }           
 }
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 768px) {
     .projectInputCon, .loginCon {
         width: 60vw ;
     }           
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1024px) {
     .projectInputCon, .loginCon{
         width: 50vw ;
     }           
 }
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1280px) {
     .projectInputCon, .loginCon{
         width: 40vw ;
     }           
 }
-@media screen and (min-width: 1400px) {
+@media screen and (min-width: 1536px) {
     .projectInputCon, .loginCon{
         width: 30vw ;
     }           
