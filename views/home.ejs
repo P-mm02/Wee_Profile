@@ -52,6 +52,7 @@
                             <p class="text-xl font-semibold mx-2"> - </p>
                             <h3 class="text-xl font-semibold mb-2"><%= new Date(card.endDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></h3>
                         </div>
+                        <h3 class="text-xl font-bold mb-2 break-all">By: <%= card.creator.username %></h3>
                     </a>
                 <% }); %>
                 
@@ -60,37 +61,3 @@
                 
     </div>
 </section>        
-
-<div id="projectModal" class="fixed hidden z-10 inset-0 flex items-center justify-center" style="background-color: rgba(0, 0, 0, 0.5);">
-    <div class="projectInputCon bg-gray-900 px-4 py-5 sm:p-6 text-white rounded-lg">
-        <h3 class="text-lg leading-6 font-medium  mb-4">Add New Project</h3>
-        <form action="/projectCard" method="POST">
-            <div class="mb-4">
-                <label for="projectName" class="block text-sm font-medium">Project Name</label>
-                <input name="projectCard[projectName]" type="text" id="projectName" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900" required>
-            </div>
-            <div class="mb-4">
-                <label for="startDate" class="block text-sm font-medium">Start Date</label>
-                <input type="date" id="startDate" name="projectCard[startDate]" class="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900" required>
-            </div>
-            <div class="mb-4">
-                <label for="endDate" class="block text-sm font-medium">End Date</label>
-                <input type="date" id="endDate" name="projectCard[endDate]" class="mt-1 p-2 border border-gray-300 rounded w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-900" required>
-            </div>              
-            <div class="mb-4">
-                <label for="projecthref" class="block text-sm font-medium">Project HRef</label>
-                <input name="projectCard[projecthref]" type="text" id="projecthref" class="mt-1 p-2 border border-gray-300 rounded w-full text-gray-900" required>
-            </div>
-
-            <div class="flex justify-end space-x-2">
-                <button type="button" id="cancelBtn" class="mx-3 bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded">
-                    Cancel
-                </button>
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded">
-                    Add Project
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-<script src="/addProject.js"></script>

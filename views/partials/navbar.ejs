@@ -15,7 +15,7 @@
             <% } else { %>
             <div class="flex justify-center items-end flex-col">
                 <h1 class="text-lg">Username : <%= currentUser.username %></h2>
-                <h1 class="text-lg">Status : Admin</h2> 
+                <h1 class="text-lg">Role : <%= currentUser.role %></h2> 
             </div>
             <form action="/users/logout" method="post">
                 <button type="submit" class="hover:bg-gray-700 text-white font-bold py-4 px-4 rounded">

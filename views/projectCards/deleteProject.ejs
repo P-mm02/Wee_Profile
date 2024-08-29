@@ -45,6 +45,7 @@
                                 <p class="text-xl font-semibold mx-2"> - </p>
                                 <h3 class="text-xl font-semibold mb-2"><%= new Date(card.endDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></h3>
                             </div>
+                            <h3 class="text-xl font-bold mb-2 break-all">By: <%= card.creator.username %></h3>
                             </button>
                     <% }); %>
                     

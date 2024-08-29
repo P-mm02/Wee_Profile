@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
-
-<div id="projectCardEditCon" class="fixed hidden z-10 inset-0 flex items-center justify-center" style="background-color: rgba(0, 0, 0, 0.5);">
+<% if (cardSelected) { %>  
+<div id="projectCardEditCon" class="fixed hidden z-50 inset-0 flex items-center justify-center" style="background-color: rgba(0, 0, 0, 0.5);">
     <div class="projectInputCon bg-gray-900 px-4 py-5 sm:p-6 text-white rounded-lg">
         <h3 class="text-lg leading-6 font-medium  mb-4">Add New Project</h3>
         <form action="/projectCard/edit/<%= cardSelected._id %>?_method=PUT" method="POST">
@@ -32,6 +32,8 @@
         </form>
     </div>
 </div>
+<% } %>
+
 <% if (script) { %>
     <%- script %>
 <% } %>
@@ -47,7 +49,6 @@
             </a>
         </div>
         <h1 class="text-5xl font-bold mb-10">Select the project you want to edit.</h1>
-
         <div class="container mx-auto mb-10">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                 <a href="/resume" class="p-6 rounded-lg shadow-md project-card">
@@ -80,6 +81,7 @@
                             <p class="text-xl font-semibold mx-2"> - </p>
                             <h3 class="text-xl font-semibold mb-2"><%= new Date(card.endDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></h3>
                         </div>
+                        <h3 class="text-xl font-bold mb-2 break-all">By: <%= card.creator.username %></h3>
                     </button>
                     </form>
                 <% }); %>

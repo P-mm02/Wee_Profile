@@ -1,11 +1,8 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const passport = require('passport')
-
 const catchAsync = require('../utils/catchAsync');
 const User = require('../models/user');
-const { UserSchema } = require('../schemas.js');
-const ExpressError = require('../utils/ExpressError');
 const { storeReturnTo } = require('../middleware');
 
 router.get('/login', (req, res) => {
@@ -19,7 +16,13 @@ router.post('/signUp', catchAsync( async(req, res) => {
     const {email, username, password, passwordConfirm, testerToken} = req.body
     if (password === passwordConfirm) {
         try {
-            const user = new User({email, username, testerToken})
+            let role = ''
+            if (testerToken) {
+                role = 'Tester'
+            } else {
+                role = 'Vistor'
+            }
+            const user = new User({email, username, testerToken, role})
             const registerUser = await User.register(user, password)
             req.login(registerUser, (err) => {
                 if (err) return next(err);
@@ -35,14 +38,6 @@ router.post('/signUp', catchAsync( async(req, res) => {
         res.redirect('signUp')
     }
 }));
-
-/* router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/users/login'}),(req, res) => {
-    req.flash('success', 'Welcome back!');
-    console.log(req.session.returnTo)
-    const redirectUrl = req.session.returnTo || '/projectCard';
-    delete req.session.returnTo;
-    res.redirect(redirectUrl);
-}) */
 
 router.post('/login', storeReturnTo, passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
         req.flash('success', 'Welcome back!');

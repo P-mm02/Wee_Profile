@@ -1,6 +1,6 @@
-.project-card {
+.project-card, nav a, nav button {
     background-color: #1E1E2E;
-    transition: background-color 0.3s ease; /* Optional for smooth transition */
+    transition: background-color 0.3s ease;
 }
   
 .project-card:hover {

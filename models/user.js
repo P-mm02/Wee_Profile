@@ -9,7 +9,8 @@ const UserSchema = new schema({
         required: true,
         unique: true
     },
-    testerToken: String
+    testerToken: String,
+    role: String
 })
 
 UserSchema.plugin(passportLocalMongoose)
