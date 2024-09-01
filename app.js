@@ -73,6 +73,9 @@ app.get('/', (req, res) => {
 app.get('/resume', (req, res) => {
     res.render('resume')
 });
+app.post('/resume/uploadImg', (req, res) => {
+    res.send(req.body);
+});
 
 app.all('*', (req, res, next) => {    
     next(new ExpressError('Page Not Found', 404))
