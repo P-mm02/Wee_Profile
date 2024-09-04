@@ -1,3 +1,7 @@
+if(process.env.NODED_ENV !== "production"){
+    require('dotenv').config();
+}
+
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -8,16 +12,17 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
-const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const User = require('./models/user')
+
 
 const projectCard = require('./routes/projectCard')
 const reviews = require('./routes/reviews')
 const users = require('./routes/users')
+const resume = require('./routes/resume')
 
 
-mongoose.connect('mongodb://localhost:27017/projectCards');
+mongoose.connect('mongodb://localhost:27017/weeProfile');
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -64,18 +69,13 @@ app.use((req, res, next) => {
 app.use('/projectCard', projectCard)
 app.use('/reviews', reviews)
 app.use('/users', users)
+app.use('/resume', resume)
 
 app.get('/', (req, res) => {
     res.redirect('/projectCard')
 });
 
 
-app.get('/resume', (req, res) => {
-    res.render('resume')
-});
-app.post('/resume/uploadImg', (req, res) => {
-    res.send(req.body);
-});
 
 app.all('*', (req, res, next) => {    
     next(new ExpressError('Page Not Found', 404))
@@ -84,6 +84,7 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
+    console.log('err, statusCode', err, statusCode);
     res.status(statusCode).render('error', { err, statusCode })
 })
 

@@ -1,0 +1,7 @@
+.profileImgBtn {
+    transition: opacity 400ms;
+    opacity: 0;
+}
+.profileImgBtn:hover {
+    opacity: 0.5;
+}
