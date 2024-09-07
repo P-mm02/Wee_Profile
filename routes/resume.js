@@ -12,4 +12,7 @@ router.get('/', isLoggedIn, catchAsync(resumeCtrl.index));
 router.put('/', isLoggedIn, upload.array('profileImgs'), catchAsync(resumeCtrl.put));
 router.get('/edit', isLoggedIn, catchAsync(resumeCtrl.editForm) );
 
+router.route('/:id')    
+    .delete(isLoggedIn, catchAsync( resumeCtrl.deleteImg ));
+
 module.exports = router;

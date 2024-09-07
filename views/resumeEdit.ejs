@@ -7,9 +7,9 @@
             <div class="col-span-1 bg-blue-200 flex flex-col">                                    
                 <div class=" slider-container relative overflow-hidden w-full" style="height: 33.33%;">
                             <div class="slider flex transition-transform duration-500 ease-in-out w-full h-full" >
-                                <img id="myProfileImg" src="/img/profileImgTest.png" alt="Image 1" class="w-full object-cover" style="height: 100%;">
-                                <img src="/img/profileImgTest.png" alt="Image 2" class="w-full object-cover" style="height: 100%;">
-                                <img src="/img/profileImgTest.png" alt="Image 3" class="w-full object-cover" style="height: 100%;">
+                                <% resume.images.forEach(img => { %>
+                                   <img src="<%= img.path %>" alt="<%= img._id %>" class="oldImg myProfileImgs w-full object-cover" style="height: 100%;">
+                                <% }); %>
                             </div>                        
                             <button type="button" id="prevBtn" class="profileImgBtn h-full absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-4xl text-white p-8 ">
                                 &#10094;
@@ -17,10 +17,14 @@
                             <button type="button" id="nextBtn" class="profileImgBtn h-full absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-4xl text-white p-8 ">
                                 &#10095;
                             </button>
+                            <button type="button" id="deleteImgBtn"  class="absolute bottom-1 bg-red-500 text-white font-bold p-2 rounded-full" style="opacity: 0.75; right: 3.25rem">
+                                🗑️
+                            </button>
                             <button type="button" class="absolute bottom-1 bg-blue-500 rounded-full p-2 shadow-2xl hover:bg-blue-600 focus:outline-none" style="opacity: 0.75; right: 0.25rem">
                                 <input type="file" name="profileImgs" id="profileImgs" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple>
                                 <img src="/img/UploadIcon.png" alt="Upload" class="w-6 h-6 pb-1">
-                            </button> 
+                            </button>
+                             
                 </div>                      
                 <div>row</div>
                 <div>row</div>
@@ -39,24 +43,36 @@
 </form>
 <script>
     document.getElementById('profileImgs').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
+        const slider = document.querySelector('.slider');
+        const images = document.querySelectorAll('.slider .oldImg');
+        const preImgs = document.querySelectorAll('.slider .preImg');        
+        const files = event.target.files;
+        Array.from(files).forEach(file => {
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById('myProfileImg').src = e.target.result;
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'preImg myProfileImgs w-full object-cover';
+                img.style.height = '100%';
+                slider.appendChild(img);
+                console.log(`Appended image for file: ${file.name}`);
             }
-            reader.readAsDataURL(file);
-        }
+            reader.readAsDataURL(file); 
+        });
+        if (images.length > 0) {            
+            currentIndex = images.length + preImgs.length;
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+        } 
     });
 </script>
 <script>
     let currentIndex = 0;
 
-    const slider = document.querySelector('.slider');
-    const images = document.querySelectorAll('.slider img');
-    const totalImages = images.length;
-
     document.getElementById('nextBtn').addEventListener('click', () => {
+        const slider = document.querySelector('.slider');
+        const images = document.querySelectorAll('.slider img');
+        const totalImages = images.length;  
+
         if (currentIndex < totalImages - 1) {
             currentIndex++;
         } else {
@@ -66,6 +82,10 @@
     });
 
     document.getElementById('prevBtn').addEventListener('click', () => {
+        const slider = document.querySelector('.slider');
+        const images = document.querySelectorAll('.slider img');
+        const totalImages = images.length;
+
         if (currentIndex > 0) {
             currentIndex--;
         } else {
@@ -73,6 +93,56 @@
         }
         slider.style.transform = `translateX(-${currentIndex * 100}%)`;
     });
+
+    document.getElementById('deleteImgBtn').addEventListener('click', () => {
+        const images = document.querySelectorAll('.slider img');
+
+        if (images[currentIndex].classList.contains('preImg')) {
+            const slider = document.querySelector('.slider');
+            const preImgs = document.querySelectorAll('.slider .preImg');
+            const fileInput = document.getElementById('profileImgs');            
+            const files = fileInput.files;
+            const fileIndex = currentIndex - (images.length - files.length);
+            const dataTransfer = new DataTransfer();
+
+            for (let i = 0; i < files.length; i++) {
+                if (i !== fileIndex) {
+                    dataTransfer.items.add(files[i]); // Add all files except the one to remove
+                }
+            }
+
+            if (currentIndex > 0) {
+                currentIndex--;
+                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+            } 
+            
+            fileInput.files = dataTransfer.files;            
+
+            preImgs[fileIndex].remove();
+        } else {
+            fetch('/resume/'+images[currentIndex].alt+'?_method=DELETE', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            }/* ,
+            body: JSON.stringify({ id: 'your-item-id' }) */  // Optional: Pass any data if needed            
+            });
+            window.location.href = '/resume'
+            
+            /* .then(response => {
+                if (response.ok) {
+                    console.log('Item deleted');                
+                } else {
+                    console.error('Failed to delete');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            }); */
+            
+        }       
+    });
+
 </script>
 
 
