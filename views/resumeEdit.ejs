@@ -19,7 +19,7 @@
                             </button>
                             <button type="button" id="deleteImgBtn"  class="absolute bottom-1 bg-red-500 text-white font-bold p-2 rounded-full" style="opacity: 0.75; right: 3.25rem">
                                 🗑️
-                            </button>
+                            </button>                    
                             <button type="button" class="absolute bottom-1 bg-blue-500 rounded-full p-2 shadow-2xl hover:bg-blue-600 focus:outline-none" style="opacity: 0.75; right: 0.25rem">
                                 <input type="file" name="profileImgs" id="profileImgs" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple>
                                 <img src="/img/UploadIcon.png" alt="Upload" class="w-6 h-6 pb-1">
@@ -41,6 +41,7 @@
         </div>        
     </section>>          
 </form>
+<form id="deleteImgForm" action="/resume" method="post"></form>
 <script>
     document.getElementById('profileImgs').addEventListener('change', function(event) {
         const slider = document.querySelector('.slider');
@@ -96,7 +97,7 @@
 
     document.getElementById('deleteImgBtn').addEventListener('click', () => {
         const images = document.querySelectorAll('.slider img');
-
+        
         if (images[currentIndex].classList.contains('preImg')) {
             const slider = document.querySelector('.slider');
             const preImgs = document.querySelectorAll('.slider .preImg');
@@ -119,17 +120,20 @@
             fileInput.files = dataTransfer.files;            
 
             preImgs[fileIndex].remove();
-        } else {
-            fetch('/resume/'+images[currentIndex].alt+'?_method=DELETE', {
+        } else {           
+            const deleteImgForm = document.getElementById('deleteImgForm');         
+
+            deleteImgForm.action = '/resume/'+images[currentIndex].alt+'?_method=DELETE';     
+            deleteImgForm.submit();
+
+            /* fetch('/resume/'+images[currentIndex].alt+'?_method=DELETE', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
-            }/* ,
-            body: JSON.stringify({ id: 'your-item-id' }) */  // Optional: Pass any data if needed            
-            });
-            window.location.href = '/resume'
-            
-            /* .then(response => {
+            },
+            body: JSON.stringify({ id: 'your-item-id' })  // Optional: Pass any data if needed            
+            })            
+            .then(response => {
                 if (response.ok) {
                     console.log('Item deleted');                
                 } else {
@@ -138,8 +142,8 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-            }); */
-            
+            });
+             */
         }       
     });
 
