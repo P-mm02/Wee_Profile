@@ -7,10 +7,46 @@ const ResumeSchema = new schema({
             filename:String
         }
     ],
-    /* name: String,
+    phoneNumber: String,
     email: String,
-    review: String,
-    rating: Number, */
+    gitHub: String,
+    address: String,
+    education: [
+        {   
+            institution: String,
+            major: String,           
+            degree: String,            
+            gradYear: Number
+        }
+    ],
+    languageSkill: [
+        {   
+            language: String,
+            rating: Number
+        }
+    ],
+
+    name: String,
+    lookingFor: [
+        {   
+            position: String
+        }
+    ],
+    introduction: String,
+    skills: [
+        {   
+            skill: String,
+            rating: Number,
+            img: String
+        }
+    ],
+    experience: [
+        {   
+            period: String,
+            position: String,
+            description: String
+        }
+    ],    
     creator: {
         type: schema.Types.ObjectId,
         ref: 'User'

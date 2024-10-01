@@ -1,15 +1,20 @@
 <% layout('layouts/boilerplate') %>
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/style/resume.css">
-<form id="uploadForm" action="/resume?_method=PUT" method="POST" enctype="multipart/form-data">
+
+<form id="uploadForm" action="/resume?_method=PUT" method="POST" enctype="multipart/form-data" >
     <section class="h-auto flex flex-col items-center justify-center py-8">    
         <div class="grid grid-cols-3 bg-white shadow-lg " style="width: 794px; height: 1121px;">
-            <div class="col-span-1 bg-blue-200 flex flex-col">                                    
-                <div class=" slider-container relative overflow-hidden w-full" style="height: 33.33%;">
+            <div class="col-span-1 bg-gray-700 flex flex-col">                                    
+                <div class="profileImg-section slider-container relative overflow-hidden w-full" style="height: 33.33%;">
                             <div class="slider flex transition-transform duration-500 ease-in-out w-full h-full" >
-                                <% resume.images.forEach(img => { %>
+                                <% if (resume.images.length>0) { %>
+                                    <% resume.images.forEach(img => { %>
                                    <img src="<%= img.path %>" alt="<%= img._id %>" class="oldImg myProfileImgs w-full object-cover" style="height: 100%;">
-                                <% }); %>
+                                    <% }); %>
+                                <% } else { %>
+                                    <img src="https://res.cloudinary.com/di70a5gqx/image/upload/v1725698483/Resume/waxtyckb4h9cwuqps1bq.jpg" alt="" class="oldImg myProfileImgs w-full object-cover" style="height: 100%;">
+                                <% } %>                                
                             </div>                        
                             <button type="button" id="prevBtn" class="profileImgBtn h-full absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-4xl text-white p-8 ">
                                 &#10094;
@@ -26,10 +31,167 @@
                             </button>
                              
                 </div>                      
-                <div>row</div>
-                <div>row</div>
+                <div class="personalInfo-section mt-2">
+                    <div class="flex items-center p-2">
+                        <i class="fas fa-phone text-2xl text-green-500 mr-2 bg-white p-2 rounded-full"></i>
+                        <input 
+                            name="resume[phoneNumber]" 
+                            value="<%= resume.phoneNumber %>" 
+                            id="phone" type="tel" 
+                            placeholder="123-456-7890" 
+                            class="rounded-md w-full border-none focus:outline-none focus:ring-0" 
+                            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" oninput="formatPhoneNumber(this)" 
+                            maxlength="12" 
+                        />
+                    </div>
+                    <div class="flex items-center p-2">
+                        <i class="fas fa-envelope text-2xl text-green-500 mr-2 bg-white p-2 rounded-full"></i>
+                        <input 
+                            name="resume[email]" 
+                            value="<%= resume.email %>" 
+                            id="email" 
+                            type="email"  
+                            placeholder="example@example.com"  
+                            class="rounded-md w-full border-none focus:outline-none focus:ring-0" 
+                        />
+                    </div>
+                    <div class="flex items-center p-2">
+                        <i class="fab fa-github text-2xl text-green-500 mr-2 bg-white p-2 rounded-full"></i>
+                        <input 
+                            name="resume[gitHub]" 
+                            value="<%= resume.gitHub %>" 
+                            id="github" 
+                            type="url"
+                            placeholder="https://github.com/yourusername"
+                            class="rounded-md w-full border-none focus:outline-none focus:ring-0"
+                            pattern="https?://(www\.)?github\.com/.*"  
+                        />
+                    </div>
+                    <div class="flex items-center p-2">
+                        <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(resume.address) %>" target="_blank" class="mr-2 bg-white p-2 rounded-xl border-2 border-red-500 shadow-lg flex button">
+                            <i class="fas fa-map-marker-alt text-2xl text-red-500"></i>
+                        </a>                                                                        
+                        <input 
+                            name="resume[address]" 
+                            value="<%= resume.address %>" 
+                            id="address" 
+                            type="text" 
+                            placeholder="Enter your address"  
+                            class="rounded-md w-full border-none focus:outline-none focus:ring-0"
+                        />
+                    </div>
+                                        
+                </div>
+                <div class="education-section px-2">
+                    <h1 class="text-2xl text-white">Education</h1>
+                    <div class="">
+                        <label for="institution" class="block text-sm font-medium text-white">Institution</label>
+                        <input 
+                            type="text" 
+                            name="resume[education][0][institution]" 
+                            id="institution" 
+                            placeholder="Enter the institution name" 
+                            class="block w-full rounded-md border-gray-300 shadow-sm" 
+                            value="<%= resume.education[0].institution %>"
+                        />
+                    </div>
+                    <div class="">
+                        <label for="major" class="block text-sm font-medium text-white">Major</label>
+                        <input 
+                            type="text" 
+                            name="resume[education][0][major]" 
+                            id="major" 
+                            placeholder="Enter the major" 
+                            class="block w-full rounded-md border-gray-300 shadow-sm" 
+                            value="<%= resume.education[0].major %>"
+                        />
+                    </div>
+                    <div class="">
+                        <label for="degree" class="block text-sm font-medium text-white">Degree</label>
+                        <input 
+                            type="text" 
+                            name="resume[education][0][degree]" 
+                            id="degree" 
+                            placeholder="Enter the degree" 
+                            class="block w-full rounded-md border-gray-300 shadow-sm"
+                            value="<%= resume.education[0].degree %>"
+                        />
+                    </div>
+                    <div class="">
+                        <label for="gradYear" class="block text-sm font-medium text-white">Graduation Year</label>
+                        <input 
+                            type="number" 
+                            name="resume[education][0][gradYear]" 
+                            id="gradYear" 
+                            placeholder="Enter the graduation year" 
+                            class="block w-full rounded-md border-gray-300 shadow-sm" 
+                            value="<%= resume.education[0].gradYear %>"
+                        />
+                    </div>
+                </div>
+                <div class="language-section p-2 ">
+                    <div class="flex space-x-4">
+                        <h1 class="text-2xl text-white ">Language Skills</h1>
+                        <button type="button" class="bg-gray-400 text-white px-2 rounded-md font-bold text-xl" onclick="addLanguage()">+</button>
+                    </div>
+                    <div id="languageSkills" class="flex flex-col space-y-2">
+                        <% if (resume.languageSkill.length>0) { %>                                
+                            <% resume.languageSkill.forEach((lang, index) => { %>
+                                <div class="flex items-center space-x-2 langCon">
+                                    <div>
+                                        <% if (index === 0) { %>
+                                            <label for="language<%= index %>" class="block text-sm font-medium text-white">Language</label>
+                                        <% } %>
+                                        <input 
+                                            type="text" 
+                                            name="resume[languageSkill][<%= index %>][language]" 
+                                            id="language<%= index %>" 
+                                            placeholder="language" 
+                                            class="block w-full rounded-md border-gray-300 shadow-sm"
+                                            value="<%= lang.language %>"
+                                        />
+                                    </div>
+                                    <div>
+                                        <% if (index === 0) { %>
+                                            <label for="rating-hidden-<%= index %>" class="block text-sm font-medium text-white">Rating</label>
+                                        <% } %>
+                                        <div class="battery-rating flex border-2 rounded-md overflow-hidden bg-white">
+                                            <% for (let i = 1; i <= 10; i++) { %>
+                                                <div 
+                                                    class="w-3 h-10 border border-gray-700 bg-gray-100 button battery-block
+                                                        <% if (lang.rating >= i) { %>
+                                                            <%= i === 1 ? 'bg-red-700' : '' %>
+                                                            <%= i === 2 ? 'bg-red-600' : '' %>
+                                                            <%= i === 3 ? 'bg-red-500' : '' %>
+                                                            <%= i === 4 ? 'bg-yellow-300' : '' %>
+                                                            <%= i === 5 ? 'bg-yellow-200' : '' %>
+                                                            <%= i === 6 ? 'bg-yellow-100' : '' %>
+                                                            <%= i === 7 ? 'bg-green-300' : '' %>
+                                                            <%= i === 8 ? 'bg-green-400' : '' %>
+                                                            <%= i === 9 ? 'bg-green-500' : '' %>
+                                                            <%= i === 10 ? 'bg-green-600' : '' %>
+                                                        <% } %>" 
+                                                    data-rating="<%= i %>">
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                                                                
+                                        <input 
+                                            type="hidden" 
+                                            name="resume[languageSkill][<%= index %>][rating]" 
+                                            id="rating-hidden-<%= index %>" 
+                                            value="<%= lang.rating %>"
+                                        />
+                                    </div>
+                                </div>                                    
+                            <% }); %>
+                        <% } else { %>
+                            
+                        <% } %>
+                    </div>
+                </div>
             </div>
-            <div class="col-span-2 bg-green-200">Column 2</div>
+            <div class="col-span-2 bg-gray-500">Column 2</div>
         </div>
         <div class="mt-8 ">
             <button type="button" class="mx-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
@@ -147,6 +309,129 @@
         }       
     });
 
+</script>
+<script>
+    function formatPhoneNumber(input) {
+      let value = input.value.replace(/\D/g, ''); // Remove all non-numeric characters
+      let formattedValue = '';
+    
+      if (value.length > 0) {
+        formattedValue += value.substring(0, 3); // First 3 digits
+      }
+      if (value.length > 3) {
+        formattedValue += '-' + value.substring(3, 6); // Next 3 digits
+      }
+      if (value.length > 6) {
+        formattedValue += '-' + value.substring(6, 10); // Last 4 digits
+      }
+    
+      input.value = formattedValue;
+    }
+
+</script>
+<script>    
+    let languageCount = document.querySelectorAll('.langCon').length;
+    
+    function addLanguage() {
+        const container = document.getElementById('languageSkills');
+        const newLanguageDiv = document.createElement('div');
+        newLanguageDiv.classList.add('mb-4', 'flex', 'items-center', 'space-x-2');
+    
+        newLanguageDiv.innerHTML = `
+            <div class="flex items-center space-x-2 langCon">
+                <div>                                
+                    <input 
+                        type="text" 
+                        name="resume[languageSkill][${languageCount}][language]" 
+                        id="language" 
+                        placeholder="Enter the language" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm"
+                    />
+                </div>
+                <div>                                
+                    <input 
+                        type="number" 
+                        name="resume[languageSkill][${languageCount}][rating]" 
+                        id="rating" 
+                        placeholder="1-10" 
+                        min="1" 
+                        max="10"
+                        class="block w-24 rounded-md border-gray-300 shadow-sm"
+                    />
+                </div>
+            </div>            
+        `;
+            
+        container.appendChild(newLanguageDiv);    
+        
+        languageCount++;
+    }
+</script>
+<script>
+    document.querySelectorAll('.battery-rating').forEach(ratingContainer => {
+        ratingContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('battery-block')) {
+                const rating = e.target.getAttribute('data-rating');
+                const blocks = ratingContainer.querySelectorAll('.battery-block');
+
+                const colorClasses = [
+                    'bg-red-700',   // index 0
+                    'bg-red-600',   // index 1
+                    'bg-red-500',   // index 2
+                    'bg-yellow-300', // index 3
+                    'bg-yellow-200', // index 4
+                    'bg-yellow-100', // index 5
+                    'bg-green-300', // index 6
+                    'bg-green-400', // index 7
+                    'bg-green-500', // index 8
+                    'bg-green-600'  // index 9
+                ];
+
+                blocks.forEach((block, index) => {
+                    block.classList.remove('bg-gray-100', ...colorClasses); // Remove all color classes
+                    if (index < rating) {
+                        block.classList.add(colorClasses[index]); // Add the corresponding color class based on index
+                    } else {
+                        block.classList.add('bg-gray-100'); // If the index is greater than or equal to the rating, set gray
+                    }
+                });
+
+                /* blocks.forEach((block, index) => {
+                    if (index < rating) {
+                        block.classList.remove('bg-gray-100');
+                        if (index === 0) {
+                            block.classList.add('bg-red-500');
+                        } else if (index === 1) {
+                            block.classList.add('bg-red-400');
+                        } else if (index === 2) {
+                            block.classList.add('bg-red-300');
+                        } else if (index === 3) {
+                            block.classList.add('bg-yellow-400');
+                        } else if (index === 4) {
+                            block.classList.add('bg-yellow-300');
+                        } else if (index === 5) {
+                            block.classList.add('bg-yellow-200');
+                        } else if (index === 6) {
+                            block.classList.add('bg-green-200');
+                        } else if (index === 7) {
+                            block.classList.add('bg-green-300');
+                        } else if (index === 8) {
+                            block.classList.add('bg-green-400');
+                        } else if (index === 9) {
+                            block.classList.add('bg-green-500');
+                        }
+                    } else {
+                        block.classList.remove('bg-green-500');
+                        block.classList.add('bg-gray-100');
+                    }
+                }); */
+
+                // Update the hidden input value
+                const hiddenInput = ratingContainer.nextElementSibling;
+                hiddenInput.value = rating;
+            }
+        });
+    });
 </script>
 
 
