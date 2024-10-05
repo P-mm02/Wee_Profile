@@ -39,7 +39,7 @@
                             value="<%= resume.phoneNumber %>" 
                             id="phone" type="tel" 
                             placeholder="123-456-7890" 
-                            class="rounded-md w-full border-none focus:outline-none focus:ring-0" 
+                            class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0" 
                             pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" oninput="formatPhoneNumber(this)" 
                             maxlength="12" 
                         />
@@ -52,7 +52,7 @@
                             id="email" 
                             type="email"  
                             placeholder="example@example.com"  
-                            class="rounded-md w-full border-none focus:outline-none focus:ring-0" 
+                            class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0" 
                         />
                     </div>
                     <div class="flex items-center p-2">
@@ -63,7 +63,7 @@
                             id="github" 
                             type="url"
                             placeholder="https://github.com/yourusername"
-                            class="rounded-md w-full border-none focus:outline-none focus:ring-0"
+                            class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0"
                             pattern="https?://(www\.)?github\.com/.*"  
                         />
                     </div>
@@ -77,7 +77,7 @@
                             id="address" 
                             type="text" 
                             placeholder="Enter your address"  
-                            class="rounded-md w-full border-none focus:outline-none focus:ring-0"
+                            class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0"
                         />
                     </div>
                                         
@@ -91,7 +91,7 @@
                             name="resume[education][0][institution]" 
                             id="institution" 
                             placeholder="Enter the institution name" 
-                            class="block w-full rounded-md border-gray-300 shadow-sm" 
+                            class="inputBG block w-full rounded-md shadow-sm" 
                             value="<%= resume.education[0].institution %>"
                         />
                     </div>
@@ -102,7 +102,7 @@
                             name="resume[education][0][major]" 
                             id="major" 
                             placeholder="Enter the major" 
-                            class="block w-full rounded-md border-gray-300 shadow-sm" 
+                            class="inputBG block w-full rounded-md shadow-sm" 
                             value="<%= resume.education[0].major %>"
                         />
                     </div>
@@ -113,7 +113,7 @@
                             name="resume[education][0][degree]" 
                             id="degree" 
                             placeholder="Enter the degree" 
-                            class="block w-full rounded-md border-gray-300 shadow-sm"
+                            class="inputBG block w-full rounded-md shadow-sm"
                             value="<%= resume.education[0].degree %>"
                         />
                     </div>
@@ -124,7 +124,7 @@
                             name="resume[education][0][gradYear]" 
                             id="gradYear" 
                             placeholder="Enter the graduation year" 
-                            class="block w-full rounded-md border-gray-300 shadow-sm" 
+                            class="inputBG block w-full rounded-md shadow-sm" 
                             value="<%= resume.education[0].gradYear %>"
                         />
                     </div>
@@ -147,15 +147,15 @@
                                             name="resume[languageSkill][<%= index %>][language]" 
                                             id="language<%= index %>" 
                                             placeholder="language" 
-                                            class="block w-full rounded-md border-gray-300 shadow-sm"
+                                            class="inputBG block w-full rounded-md shadow-sm"
                                             value="<%= lang.language %>"
                                         />
                                     </div>
                                     <div>
                                         <% if (index === 0) { %>
-                                            <label for="rating-hidden-<%= index %>" class="block text-sm font-medium text-white">Rating</label>
+                                            <label class="block text-sm font-medium text-white">Rating</label>
                                         <% } %>
-                                        <div class="battery-rating flex border-2 rounded-md overflow-hidden bg-white">
+                                        <div class="battery-rating flex rounded-md overflow-hidden bg-white" style="border: 4px solid rgba(0, 0, 0, 0.8);">
                                             <% for (let i = 1; i <= 10; i++) { %>
                                                 <div 
                                                     class="w-3 h-10 border border-gray-700 bg-gray-100 button battery-block
@@ -191,7 +191,104 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-2 bg-gray-500">Column 2</div>
+            <div class="col-span-2 flex flex-col" style="background-image: url(/img/background.jpg);background-size: cover; background-position: center; background-repeat: no-repeat;">
+                <div class="w-auto p-4">
+                    <input 
+                        name="resume[name]" 
+                        value="<%= resume.name %>" 
+                        id="nameInput" 
+                        type="text" 
+                        placeholder="Enter your name" 
+                        class="inputBG rounded-md w-full text-4xl font-bold" 
+                        maxlength="50" 
+                    />
+                </div>
+                <div class="px-4">
+                    <h2 class="block text-lg font-medium text-white font-bold">Looking for</h2>
+                    <div class="grid grid-cols-3 gap-x-2" id="lookingForCon">
+                        <% resume.lookingFor.forEach((job, index) => { %>
+                            <input 
+                                    type="text" 
+                                    name="resume[lookingFor][<%= index %>][position]" 
+                                    id="position-<%= index %>" 
+                                    value="<%= job.position %>" 
+                                    placeholder="Enter position" 
+                                    class="inputBG block w-full rounded-md shadow-sm font-bold"
+                                >
+                        <% }) %>
+                    
+                        <!-- Add more positions button -->
+                        <button id="addPositionBtn" type="button" class="flex justify-center items-center text-white text-xl py-2 rounded-md shadow-lg" style="background-color: rgb(59, 130, 246, 0.8);">Add</button>
+    
+                    </div>
+                </div>
+                <div class="px-4 mt-2">
+                    <!-- Introduction field -->
+                    <label for="introduction" class="block text-lg font-medium text-white">Introduction</label>
+                    <textarea 
+                        name="resume[introduction]" 
+                        id="introduction" 
+                        rows="1" 
+                        placeholder="Write a brief introduction about yourself" 
+                        class="inputBG rounded-md w-full p-2 text-lg shadow-sm font-bold"
+                        maxlength="750"
+                        style="overflow: hidden"
+                        oninput="autoResize(this)"
+                    ><%= resume.introduction %></textarea>
+                </div>
+                <div class="px-4 mt-2">
+                    <h2 class="block text-lg font-medium text-white font-bold">Skills</h2>
+                    <div id="skillsContainer" class="grid grid-cols-3">
+                        <% resume.skills.forEach((skill, index) => { %>
+                            <div class="skill-entry">
+                                <!-- Skill Name -->
+                                <input 
+                                    type="text" 
+                                    name="resume[skills][<%= index %>][skill]" 
+                                    value="<%= skill.skill %>" 
+                                    placeholder="Enter skill" 
+                                    class="inputBG block w-full rounded-md shadow-sm font-bold"
+                                >
+                                <div class="grid grid-cols-10 battery-rating flex rounded-md overflow-hidden bg-white" style="border: 4px solid rgba(0, 0, 0, 0.8);">
+                                    <% for (let i = 1; i <= 10; i++) { %>
+                                        <div 
+                                            class="h-10 border border-gray-700 bg-gray-100 button battery-block
+                                                <% if (skill.rating >= i) { %>
+                                                    <%= i === 1 ? 'bg-red-700' : '' %>
+                                                    <%= i === 2 ? 'bg-red-600' : '' %>
+                                                    <%= i === 3 ? 'bg-red-500' : '' %>
+                                                    <%= i === 4 ? 'bg-yellow-300' : '' %>
+                                                    <%= i === 5 ? 'bg-yellow-200' : '' %>
+                                                    <%= i === 6 ? 'bg-yellow-100' : '' %>
+                                                    <%= i === 7 ? 'bg-green-300' : '' %>
+                                                    <%= i === 8 ? 'bg-green-400' : '' %>
+                                                    <%= i === 9 ? 'bg-green-500' : '' %>
+                                                    <%= i === 10 ? 'bg-green-600' : '' %>
+                                                <% } %>" 
+                                            data-rating="<%= i %>">
+                                        </div>
+                                    <% } %>
+                                </div>
+                                <!-- Skill Rating -->
+                                <input 
+                                    type="number" 
+                                    name="resume[skills][<%= index %>][rating]" 
+                                    value="<%= skill.rating %>" 
+                                    min="1" 
+                                    max="10" 
+                                    placeholder="Rating (0-5)" 
+                                    class="inputBG block w-full rounded-md shadow-sm mt-2 hidden"
+                                >
+                            </div>
+                        <% }) %>
+                        <button id="addSkillBtn" type="button" class="flex justify-center items-center text-white text-xl py-2 rounded-md shadow-lg" style="background-color: rgb(59, 130, 246, 0.8);">
+                            Add Skill
+                        </button>
+                    </div>
+                    
+                </div>
+                
+            </div>
         </div>
         <div class="mt-8 ">
             <button type="button" class="mx-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
@@ -433,5 +530,124 @@
         });
     });
 </script>
+<script>
+    document.getElementById('addPositionBtn').addEventListener('click', function() {
+        const container = document.createElement('div');
+        
+        const index = document.querySelectorAll('input[name^="resume[lookingFor]"]').length;
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = `resume[lookingFor][${index}][position]`;
+        input.id = `position-${index}`;
+        input.placeholder = 'Enter position';
+        input.className = 'inputBG block w-full rounded-md shadow-sm font-bold';
+        
+        
+        container.appendChild(input);
+        
+        document.getElementById('lookingForCon').insertBefore(container, document.getElementById('addPositionBtn'));
+    });
+</script>
+<script>
+    window.onload = function() {
+    const introductionTextarea = document.getElementById('introduction');
+        if (introductionTextarea) {
+            autoResize(introductionTextarea); // Run autoResize on page load for the introduction field
+        }
+    };
+    function autoResize(textarea) {
+        textarea.style.height = 'auto'; // Reset height
+        textarea.style.height = textarea.scrollHeight + 'px'; // Set height to match content
+    }
+</script>
+<script>
+    document.getElementById('addSkillBtn').addEventListener('click', function() {
+        const container = document.getElementById('skillsContainer');
+        const addSkillBtn = document.getElementById('addSkillBtn');
+        const newIndex = container.querySelectorAll('.skill-entry').length;
+    
+        // Create a new skill entry div
+        const newSkill = document.createElement('div');
+        newSkill.classList.add('skill-entry');
+        newSkill.innerHTML = `            
+            <!-- Skill Name -->
+                <input 
+                    type="text" 
+                    name="resume[skills][${newIndex}][skill]" 
+                    id="skill-${newIndex}"
+                    placeholder="Enter skill" 
+                    class="inputBG block w-full rounded-md shadow-sm font-bold"
+                >
+                
+                <!-- Skill Rating -->
+                <div class="grid grid-cols-10 battery-rating flex rounded-md overflow-hidden bg-white" style="border: 4px solid rgba(0, 0, 0, 0.8);">
+                    ${[...Array(10)].map((_, i) => `
+                        <div 
+                            class="h-10 border border-gray-700 bg-gray-100 battery-block"
+                            data-rating="${i + 1}"
+                            style="cursor: pointer;">
+                        </div>
+                    `).join('')}
+                </div>
+    
+                <!-- Hidden numeric input for the rating -->
+                <input 
+                    type="number" 
+                    name="resume[skills][${newIndex}][rating]" 
+                    id="rating-${newIndex}" 
+                    min="1" 
+                    max="10"
+                    placeholder="Rating (1-10)" 
+                    class="inputBG block w-full rounded-md shadow-sm hidden rating-input"
+                >
+        `;
+    
+        // Insert new skill entry before the "Add Skill" button
+        container.insertBefore(newSkill, addSkillBtn);
+    
+        // Add event listeners for rating blocks
+        const ratingBlocks = newSkill.querySelectorAll('.battery-block');
+        const ratingInput = newSkill.querySelector('.rating-input');
+    
+        ratingBlocks.forEach(block => {
+            block.addEventListener('click', function() {
+                const ratingValue = this.getAttribute('data-rating');
+                ratingInput.value = ratingValue; // Update hidden input with selected rating
+    
+                // Update the visual appearance of the blocks based on rating
+                ratingBlocks.forEach((b, idx) => {
+                    if (idx + 1 <= ratingValue) {
+                        b.classList.remove('bg-gray-100');
+                        b.classList.add(getColorForRating(idx + 1));
+                    } else {
+                        b.classList.remove(getColorForRating(idx + 1));
+                        b.classList.add('bg-gray-100');
+                    }
+                });
+            });
+        });
+    
+        // Function to get color based on rating
+        function getColorForRating(rating) {
+            if (rating === 1) return 'bg-red-700';
+            if (rating === 2) return 'bg-red-600';
+            if (rating === 3) return 'bg-red-500';
+            if (rating === 4) return 'bg-yellow-300';
+            if (rating === 5) return 'bg-yellow-200';
+            if (rating === 6) return 'bg-yellow-100';
+            if (rating === 7) return 'bg-green-300';
+            if (rating === 8) return 'bg-green-400';
+            if (rating === 9) return 'bg-green-500';
+            if (rating === 10) return 'bg-green-600';
+            return '';
+        }
+    });
+</script>
+    
+    
+    
+    
+
 
 

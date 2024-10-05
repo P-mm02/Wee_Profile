@@ -69,14 +69,12 @@ app.use((req, res, next) => {
     console.log(`Request method: ${req.method}, Request URL: ${req.url}`);
     next();
 }); */
+app.use('/', projectCard)
 app.use('/projectCard', projectCard)
 app.use('/reviews', reviews)
 app.use('/users', users)
 app.use('/resume', resume)
 
-app.get('/', (req, res) => {
-    res.redirect('/projectCard')
-});
 
 
 

@@ -36,8 +36,7 @@ const ResumeSchema = new schema({
     skills: [
         {   
             skill: String,
-            rating: Number,
-            img: String
+            rating: Number
         }
     ],
     experience: [
