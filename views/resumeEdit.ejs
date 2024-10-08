@@ -4,8 +4,8 @@
 
 <form id="uploadForm" action="/resume?_method=PUT" method="POST" enctype="multipart/form-data" >
     <section class="h-auto flex flex-col items-center justify-center py-8">    
-        <div class="grid grid-cols-3 bg-white shadow-lg " style="width: 794px; height: 1121px;">
-            <div class="col-span-1 bg-gray-700 flex flex-col">                                    
+        <div class="resume-section grid grid-cols-3 bg-white shadow-lg " style="width: 794px; height: 1121px;">
+            <div class="left-section col-span-1 bg-gray-700 flex flex-col">                                    
                 <div class="profileImg-section slider-container relative overflow-hidden w-full" style="height: 33.33%;">
                             <div class="slider flex transition-transform duration-500 ease-in-out w-full h-full" >
                                 <% if (resume.images.length>0) { %>
@@ -137,19 +137,25 @@
                     <div id="languageSkills" class="flex flex-col space-y-2">
                         <% if (resume.languageSkill.length>0) { %>                                
                             <% resume.languageSkill.forEach((lang, index) => { %>
-                                <div class="flex items-center space-x-2 langCon">
+                                <div class="langCon flex items-center space-x-2">
                                     <div>
                                         <% if (index === 0) { %>
                                             <label for="language<%= index %>" class="block text-sm font-medium text-white">Language</label>
                                         <% } %>
-                                        <input 
+                                        <div class="input-wrapper relative">
+                                            <input 
                                             type="text" 
                                             name="resume[languageSkill][<%= index %>][language]" 
                                             id="language<%= index %>" 
                                             placeholder="language" 
                                             class="inputBG block w-full rounded-md shadow-sm"
                                             value="<%= lang.language %>"
+                                            data-index="<%= index %>"
                                         />
+                                        <button type="button" class="delete-lang delete-btn text-white text-xs">
+                                            &#10006;
+                                        </button>
+                                        </div>                                        
                                     </div>
                                     <div>
                                         <% if (index === 0) { %>
@@ -191,8 +197,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-2 flex flex-col" style="background-image: url(/img/background.jpg);background-size: cover; background-position: center; background-repeat: no-repeat;">
-                <div class="w-auto p-4">
+            <div class="right-section col-span-2 flex flex-col" style="background-image: url(/img/background.jpg);background-size: cover; background-position: center; background-repeat: no-repeat;">
+                <div class="name-section w-auto p-4">
                     <input 
                         name="resume[name]" 
                         value="<%= resume.name %>" 
@@ -203,7 +209,7 @@
                         maxlength="50" 
                     />
                 </div>
-                <div class="px-4">
+                <div class="lookingFor-section px-4">
                     <h2 class="block text-lg font-medium text-white font-bold">Looking for</h2>
                     <div class="grid grid-cols-3 gap-x-2" id="lookingForCon">
                         <% resume.lookingFor.forEach((job, index) => { %>
@@ -222,7 +228,7 @@
     
                     </div>
                 </div>
-                <div class="px-4 mt-2">
+                <div class="introduction-section px-4 mt-2">
                     <!-- Introduction field -->
                     <label for="introduction" class="block text-lg font-medium text-white">Introduction</label>
                     <textarea 
@@ -236,7 +242,7 @@
                         oninput="autoResize(this)"
                     ><%= resume.introduction %></textarea>
                 </div>
-                <div class="px-4 mt-2">
+                <div class="skill-section px-4 mt-2">
                     <h2 class="block text-lg font-medium text-white font-bold">Skills</h2>
                     <div id="skillsContainer" class="grid grid-cols-3">
                         <% resume.skills.forEach((skill, index) => { %>
@@ -281,7 +287,7 @@
                                 >
                             </div>
                         <% }) %>
-                        <button id="addSkillBtn" type="button" class="flex justify-center items-center text-white text-xl py-2 rounded-md shadow-lg" style="background-color: rgb(59, 130, 246, 0.8);">
+                        <button id="addSkillBtn" type="button" class="flex justify-center items-center text-white text-xl py-2 rounded-md shadow-lg" style="background-color: rgb(59, 130, 246, 0.7);">
                             Add Skill
                         </button>
                     </div>
@@ -290,7 +296,7 @@
                 
             </div>
         </div>
-        <div class="mt-8 ">
+        <div class="processBtn-section mt-8 ">
             <button type="button" class="mx-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
                 Cancel
             </button>              
@@ -427,42 +433,116 @@
 
 </script>
 <script>    
-    let languageCount = document.querySelectorAll('.langCon').length;
-    
     function addLanguage() {
+        const languageCount = document.querySelectorAll('.langCon').length;
         const container = document.getElementById('languageSkills');
         const newLanguageDiv = document.createElement('div');
-        newLanguageDiv.classList.add('mb-4', 'flex', 'items-center', 'space-x-2');
+        newLanguageDiv.classList.add('langCon', 'mb-4', 'flex', 'items-center', 'space-x-2');
     
         newLanguageDiv.innerHTML = `
-            <div class="flex items-center space-x-2 langCon">
-                <div>                                
-                    <input 
+                <div>
+                    <div class="input-wrapper relative">
+                        <input 
                         type="text" 
                         name="resume[languageSkill][${languageCount}][language]" 
-                        id="language" 
-                        placeholder="Enter the language" 
-                        class="block w-full rounded-md border-gray-300 shadow-sm"
-                    />
+                        id="language-${languageCount}" 
+                        placeholder="Language"
+                        data-index="${languageCount}" 
+                        class="inputBG block w-full rounded-md shadow-sm"
+                        />                    
+                        <button type="button" class="delete-lang delete-btn text-white text-xs">
+                            &#10006;
+                        </button>
+                    </div>                                  
                 </div>
-                <div>                                
+                <div>
+                    <div class="battery-rating flex rounded-md overflow-hidden bg-white" style="border: 4px solid rgba(0, 0, 0, 0.8);">
+                    ${[...Array(10)].map((_, i) => `
+                        <div 
+                            class="w-3 h-10 border border-gray-700 bg-gray-100 button battery-block"                            
+                            data-rating="${i + 1}"
+                            style="cursor: pointer;">
+                        </div>
+                    `).join('')}
+                    </div>                                
                     <input 
-                        type="number" 
+                        type="hidden" 
                         name="resume[languageSkill][${languageCount}][rating]" 
-                        id="rating" 
+                        id="rating-hidden-${languageCount}" 
                         placeholder="1-10" 
                         min="1" 
                         max="10"
-                        class="block w-24 rounded-md border-gray-300 shadow-sm"
+                        class="rating-input block w-24 rounded-md border-gray-300 shadow-sm"
                     />
-                </div>
-            </div>            
+                </div>            
         `;
             
-        container.appendChild(newLanguageDiv);    
-        
-        languageCount++;
+        container.appendChild(newLanguageDiv); 
+
+        // Add event listeners for rating blocks
+        const ratingBlocks = newLanguageDiv.querySelectorAll('.battery-block');
+        const ratingInput = newLanguageDiv.querySelector('.rating-input');
+    
+        ratingBlocks.forEach(block => {
+            block.addEventListener('click', function() {
+                const ratingValue = this.getAttribute('data-rating');
+                ratingInput.value = ratingValue; // Update hidden input with selected rating
+    
+                // Update the visual appearance of the blocks based on rating
+                ratingBlocks.forEach((b, idx) => {
+                    if (idx + 1 <= ratingValue) {
+                        b.classList.remove('bg-gray-100');
+                        b.classList.add(getColorForRating(idx + 1));
+                    } else {
+                        b.classList.remove(getColorForRating(idx + 1));
+                        b.classList.add('bg-gray-100');
+                    }
+                });
+            });
+        });
+    
+        // Function to get color based on rating
+        function getColorForRating(rating) {
+            if (rating === 1) return 'bg-red-700';
+            if (rating === 2) return 'bg-red-600';
+            if (rating === 3) return 'bg-red-500';
+            if (rating === 4) return 'bg-yellow-300';
+            if (rating === 5) return 'bg-yellow-200';
+            if (rating === 6) return 'bg-yellow-100';
+            if (rating === 7) return 'bg-green-300';
+            if (rating === 8) return 'bg-green-400';
+            if (rating === 9) return 'bg-green-500';
+            if (rating === 10) return 'bg-green-600';
+            return '';
+        }
     }
+    document.getElementById('languageSkills').addEventListener('click', function(event) {
+    // Check if the clicked element has the class 'delete-lang'
+        if (event.target && event.target.classList.contains('delete-lang')) {
+            // Find the closest parent element with the class 'langCon'
+            const langConTarget = event.target.closest('.langCon');
+            
+            if (langConTarget) {
+                langConTarget.remove(); // Remove the .langCon element from the DOM
+
+                const langCons = document.querySelectorAll('.langCon'); // Select all remaining language divs
+                console.log(langCons.length);
+                
+                langCons.forEach((langCon, newIndex) => {                
+                    // Update id and name for the language input
+                    const langInput = langCon.querySelector('input[type="text"]');
+                    langInput.id = `language${newIndex}`;
+                    langInput.name = `resume[languageSkill][${newIndex}][language]`;
+                    langInput.setAttribute('data-index', newIndex);               
+
+                    // Update id and name for the hidden rating input
+                    const ratingInput = langCon.querySelector('input[type="hidden"]');
+                    ratingInput.id = `rating-hidden-${newIndex}`;
+                    ratingInput.name = `resume[languageSkill][${newIndex}][rating]`;
+                });
+            }
+        }
+    });    
 </script>
 <script>
     document.querySelectorAll('.battery-rating').forEach(ratingContainer => {

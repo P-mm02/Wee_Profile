@@ -19,7 +19,28 @@
     border: 1px solid white;
     box-shadow: 0 0 2px rgba(255, 255, 255, 0.7);
 }
+.inputBG:hover {
+    border: 1px solid white;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.7);
+}
 
-#nameInput{
-
+.delete-btn {
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Hide completely when not visible */
+    position: absolute;
+    top: -10px;
+    right: 0;
+    transform: translate(50%, -50%); /* Adjust positioning to make it appear inside the corner */
+    background-color: rgb(239, 68, 68, 0.8); /* Red background */
+    border-radius: 50%; /* Make it circular */
+    padding: 4px; /* Adjust padding for the size */
+    
+}
+.input-wrapper:hover .delete-btn {
+    opacity: 1; /* Fully visible on hover */
+    visibility: visible; /* Ensure visibility is restored */
+    transition-delay: 0s; /* No delay when showing */
+}
+.input-wrapper .delete-btn {
+    transition-delay: 1s; /* Delay hiding for 0.5 seconds */
 }
