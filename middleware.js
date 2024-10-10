@@ -45,3 +45,12 @@ module.exports.isAdminDeleteReview = (req, res, next) => {
         next();
     }
 }
+
+module.exports.isAdminEditResume = (req, res, next) => {
+    if (req.user.role !== 'Admin') {
+        req.flash('error', 'Only admin can edit this resume!')
+        return res.redirect(`/resume`);
+    }else {
+        next();
+    }
+}

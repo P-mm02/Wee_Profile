@@ -23,6 +23,9 @@
     border: 1px solid white;
     box-shadow: 0 0 2px rgba(255, 255, 255, 0.7);
 }
+.nameInput{
+    border: 1px solid rgba(255, 255, 255, 0);
+}
 
 .delete-btn {
     opacity: 0; /* Initially hidden */
@@ -39,8 +42,13 @@
 .input-wrapper:hover .delete-btn {
     opacity: 1; /* Fully visible on hover */
     visibility: visible; /* Ensure visibility is restored */
-    transition-delay: 0s; /* No delay when showing */
+    transition-delay: 0.1s; /* No delay when showing */
 }
 .input-wrapper .delete-btn {
-    transition-delay: 1s; /* Delay hiding for 0.5 seconds */
+    transition-delay: 0.8s; /* Delay hiding for 0.5 seconds */
+}
+
+.battery-block:hover {
+    border: 1px solid white;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.7);
 }

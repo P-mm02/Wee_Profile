@@ -2,7 +2,7 @@ const ResumeModel = require('../models/resume')
 const cloudinary = require('cloudinary').v2;
 
 module.exports.index = async(req, res) => {
-    const resume = await ResumeModel.findOne({creator: req.user._id}).populate('creator', 'username email')
+    const resume = await ResumeModel.findOne({creator: '66d5413f6e9619247d2c9c21'}).populate('creator', 'username email role')    
     if (resume) {
         res.render('resumeEdit', {resume})
     } else {
@@ -12,8 +12,18 @@ module.exports.index = async(req, res) => {
         res.render('resumeEdit', {resume})
     }
 }
-module.exports.put = async(req, res) => {
-    
+module.exports.yourResume = async(req, res) => {
+    const resume = await ResumeModel.findOne({creator: req.user._id}).populate('creator', 'username email role')
+    if (resume) {
+        res.render('resumeEdit', {resume})
+    } else {
+        const resume = await new ResumeModel({         
+            creator: req.user._id,
+        }).save();
+        res.render('resumeEdit', {resume})
+    }
+}
+module.exports.put = async(req, res) => {    
     if (req.files && req.files.length > 0) {
         const resume = await ResumeModel.findOne({creator: req.user._id}).populate('creator', 'username email')
         resume.images.push(...req.files.map(f => ({ path: f.path, filename: f.filename })));
@@ -21,10 +31,14 @@ module.exports.put = async(req, res) => {
         await resume.save();
     }else{
         await ResumeModel.findOneAndUpdate({creator: req.user._id}, { ...req.body.resume });
+    }    
+    req.flash('success', 'Successfully Edit Resume!');
+    if (req.user._id !== '66d5413f6e9619247d2c9c21') {
+        res.redirect('/resume/yourResume')
+    } else {
+        res.redirect('/resume')
     }
     
-    req.flash('success', 'Successfully Edit Resume!');
-    res.redirect('/resume')
     
 }
 module.exports.editForm = async(req, res) => {
