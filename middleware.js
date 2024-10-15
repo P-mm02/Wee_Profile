@@ -39,7 +39,7 @@ module.exports.validateReview = (req, res, next) => {
 
 module.exports.isAdminDeleteReview = (req, res, next) => {
     if (req.user.role !== 'Admin') {
-        req.flash('error', 'Only admin can delete reviews!')
+        req.flash('error', 'Only Admin can delete reviews!')
         return res.redirect(`/reviews`);
     }else {
         next();
@@ -48,8 +48,17 @@ module.exports.isAdminDeleteReview = (req, res, next) => {
 
 module.exports.isAdminEditResume = (req, res, next) => {
     if (req.user.role !== 'Admin') {
-        req.flash('error', 'Only admin can edit this resume!')
+        req.flash('error', 'Only Admin can edit this resume!')
         return res.redirect(`/resume`);
+    }else {
+        next();
+    }
+}
+
+module.exports.isAdminOrTester = (req, res, next) => {
+    if (req.user.role !== 'Admin' && req.user.role !== 'Tester') {
+        req.flash('error', 'Access restricted to Admins and Testers only!')
+        return res.redirect(`/`);
     }else {
         next();
     }

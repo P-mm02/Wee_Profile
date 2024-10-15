@@ -16,6 +16,13 @@
     </div>
 <% } %>
 
+<div id="client-alert" onclick="closeAlert('client-alert')" style="display: none; justify-content: center; align-items: center; background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 8px 16px; border-radius: 4px; margin-bottom: 16px; position: relative; transition: opacity 0.3s ;" role="alert">
+    <span style="font-size: 1.25rem;"></span>
+    <button type="button" style="position: absolute; right: 16px; padding-left: 16px; background: none; border: none;" aria-label="Close">
+        <span style="color: #721c24; font-size: 1.25rem;" aria-hidden="true">&times;</span>
+    </button>
+</div>
+
 <script>
     function closeAlert(id) {
         const alert = document.getElementById(id);

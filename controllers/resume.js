@@ -1,8 +1,10 @@
 const ResumeModel = require('../models/resume')
+const User = require('../models/user');
 const cloudinary = require('cloudinary').v2;
 
 module.exports.index = async(req, res) => {
-    const resume = await ResumeModel.findOne({creator: '66d5413f6e9619247d2c9c21'}).populate('creator', 'username email role')    
+    const admin = await User.findOne({role: 'Admin'})   
+    const resume = await ResumeModel.findOne({creator: admin._id}).populate('creator', 'username email role')    
     if (resume) {
         res.render('resumeEdit', {resume})
     } else {
@@ -26,14 +28,20 @@ module.exports.yourResume = async(req, res) => {
 module.exports.put = async(req, res) => {    
     if (req.files && req.files.length > 0) {
         const resume = await ResumeModel.findOne({creator: req.user._id}).populate('creator', 'username email')
-        resume.images.push(...req.files.map(f => ({ path: f.path, filename: f.filename })));
-        Object.assign(resume, req.body.resume);
-        await resume.save();
+        if (resume.images.length + req.files.length > 5) {
+            req.flash('error', 'You cannot upload more than 5 images!');           
+        } else {
+            resume.images.push(...req.files.map(f => ({ path: f.path, filename: f.filename })));
+            Object.assign(resume, req.body.resume);
+            await resume.save();
+            req.flash('success', 'Successfully Edit Resume!');
+        }        
     }else{
         await ResumeModel.findOneAndUpdate({creator: req.user._id}, { ...req.body.resume });
+        req.flash('success', 'Successfully Edit Resume!');
     }    
-    req.flash('success', 'Successfully Edit Resume!');
-    if (req.user._id !== '66d5413f6e9619247d2c9c21') {
+    
+    if (req.user.role !== 'Admin') {
         res.redirect('/resume/yourResume')
     } else {
         res.redirect('/resume')

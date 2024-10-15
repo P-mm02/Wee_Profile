@@ -1,4 +1,3 @@
-const { types } = require('joi')
 const mongoose = require('mongoose')
 const schema = mongoose.Schema
 const passportLocalMongoose = require('passport-local-mongoose')
@@ -10,7 +9,10 @@ const UserSchema = new schema({
         unique: true
     },
     testerToken: String,
-    role: String
+    role: {
+        type: String,
+        default: 'Visitor'
+    }
 })
 
 UserSchema.plugin(passportLocalMongoose)

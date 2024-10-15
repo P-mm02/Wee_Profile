@@ -12,6 +12,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
+const passportConfig = require('./config/passportConfig');
 const ExpressError = require('./utils/ExpressError');
 const User = require('./models/user')
 
@@ -20,6 +21,7 @@ const projectCard = require('./routes/projectCard')
 const reviews = require('./routes/reviews')
 const users = require('./routes/users')
 const resume = require('./routes/resume')
+const tokenGenerate = require('./routes/tokenGenerate')
 
 
 mongoose.connect('mongodb://localhost:27017/weeProfile');
@@ -35,6 +37,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
@@ -74,6 +77,7 @@ app.use('/projectCard', projectCard)
 app.use('/reviews', reviews)
 app.use('/users', users)
 app.use('/resume', resume)
+app.use('/tokenGenerate', tokenGenerate)
 
 
 
@@ -84,6 +88,7 @@ app.all('*', (req, res, next) => {
 
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
+    /* console.log(err); */
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
     /* console.log('err, statusCode', err, statusCode); */
     res.status(statusCode).render('error', { err, statusCode })

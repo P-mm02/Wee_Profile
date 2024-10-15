@@ -373,36 +373,32 @@
         });
     });
 </script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script>
-    document.getElementById('captureBtn').addEventListener('click', function () {
-        var element = document.getElementById('resumeWrapper'); // Target the resumeWrapper only
-
-        html2canvas(element, {
-            scale: 3, // Higher scale for better quality
-            useCORS: true, // Enable CORS if necessary for external images
-            allowTaint: false
-        }).then(function (canvas) {
-            // Convert the canvas to an image
-            var imgData = canvas.toDataURL('image/png');
-            var link = document.createElement('a');
-            link.href = imgData;
-            link.download = 'resume_capture.png'; // Set the file name for download
-            link.click(); // Simulate a click to download the image
-        });
-    });
-</script> -->
-
-
-
 
 <script>
     document.getElementById('profileImgs').addEventListener('change', function(event) {
         const slider = document.querySelector('.slider');
         const images = document.querySelectorAll('.slider .oldImg');
-        const preImgs = document.querySelectorAll('.slider .preImg');        
-        const files = event.target.files;
-        Array.from(files).forEach(file => {
+        const preImgs = document.querySelectorAll('.slider .preImg');
+        let files = Array.from(event.target.files); // Convert FileList to an array
+        const totalImages = images.length + preImgs.length;
+
+        // Prevent user from selecting more than 5 files at once
+        if (totalImages + files.length > 5) {
+            event.target.value = '';
+            slider.style.transform = `translateX(0%)`;
+            preImgs.forEach(img => {            
+                img.remove();            
+            });
+
+            const clientAlert = document.getElementById('client-alert');
+            clientAlert.style.display = 'flex';
+            clientAlert.innerText = 'You cannot upload more than 5 images!';
+            
+            return;
+        }
+
+        // Process valid files
+        files.forEach(file => {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = document.createElement('img');
@@ -411,11 +407,13 @@
                 img.style.height = '100%';
                 slider.appendChild(img);
                 console.log(`Appended image for file: ${file.name}`);
-            }
+            };
             reader.readAsDataURL(file); 
         });
+
+        // Adjust slider if there are already images
         if (images.length > 0) {            
-            currentIndex = images.length + preImgs.length;
+            const currentIndex = images.length + preImgs.length;
             slider.style.transform = `translateX(-${currentIndex * 100}%)`;
         } 
     });

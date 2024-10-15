@@ -12,12 +12,18 @@ module.exports.signUp = async(req, res) => {
     const {email, username, password, passwordConfirm, testerToken} = req.body
     if (password === passwordConfirm) {
         try {
-            let role = ''
+            let role = 'Visitor'
             if (testerToken) {
-                role = 'Tester'
-            } else {
-                role = 'Vistor'
+                const testerTokenCheck = await tokenModel.find({token: testerToken});
+                if (testerTokenCheck.length > 0) {
+                    role = 'Tester'
+                } else {
+                    role = 'Visitor'
+                    req.flash('error', 'Tester Token does not correct!');
+                    return res.redirect('signUp');
+                }
             }
+            
             const user = new User({email, username, testerToken, role})
             const registerUser = await User.register(user, password)
             req.login(registerUser, (err) => {
@@ -41,6 +47,12 @@ module.exports.login = (req, res) => {
     res.redirect(redirectUrl);
 }
 
+module.exports.loginToken = (req, res) => {
+    req.flash('success', 'Successfully generate new user and logged in!');
+    const redirectUrl = res.locals.returnTo || '/projectCard';
+    res.redirect(redirectUrl);
+}
+
 module.exports.logout = (req, res, next) => {
     req.logout((err) => {
         if (err) {
@@ -49,4 +61,23 @@ module.exports.logout = (req, res, next) => {
         req.flash('success', "Goodbye!");
         res.redirect('/projectCard');
     });
+}
+
+module.exports.check = async(req, res, next) => {    
+    const { username, email } = req.body;    
+    
+    if (username) {
+        const userWithUsername = await User.findOne({ username });
+        if (userWithUsername) {
+            return res.json({ success: false, message: 'This username is already taken!' });
+        }
+        res.json({ success: true, message: 'Available' });
+    }
+    if (email) {
+        const userWithEmail = await User.findOne({ email });
+        if (userWithEmail) {
+            return res.json({ success: false, message: 'This email is already taken!' });
+        }
+        res.json({ success: true, message: 'Available' });
+    }
 }

@@ -1,0 +1,91 @@
+<% layout('layouts/boilerplate')%>
+
+
+<div class="h-full flex flex-col items-center">
+    <div class="bg-white shadow-md rounded-lg p-6 w-1/2 mt-8">
+        <h1 class="text-2xl font-bold text-center mb-6 text-gray-700">Generate Tester Token</h1>
+
+        <form action="/tokenGenerate" id="generate-token-form" class="space-y-4" method="post">
+            <div>
+                <label for="testerToken" class="block text-gray-700 font-semibold">Your Tester Token</label>
+
+                <% let userToken = ''; %>
+                <% const foundToken = tokens.find(token => token.creator.username === currentUser.username); %>
+                <% if (foundToken) { %>
+                    <% userToken = foundToken.token; %>
+                <% } %>
+
+                <input 
+                    value="<%= userToken %>" 
+                    type="text" 
+                    id="testerToken" 
+                    name="token[token]" 
+                    class="w-full p-2 border border-gray-300 rounded-md" 
+                    placeholder="Your generated token" 
+                    readonly
+                />
+            </div>
+            
+            <div class="flex justify-center">
+                <button type="button" onclick="generateToken()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md w-full">Generate Token</button>
+            </div>
+        </form>
+
+        <div id="token-alert" class="text-center mt-4 hidden">
+            <span class="text-green-600 font-bold">Token generated successfully!</span>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6 w-1/2 mt-8">
+        <h1 class="text-2xl font-bold text-center mb-6 text-gray-700">Generated Tokens (Last 100)</h1>
+    
+        <div class="overflow-x-auto">
+            <table class="w-full bg-white border">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border-b text-left text-gray-700 font-semibold">Token</th>
+                        <th class="py-2 px-4 border-b text-left text-gray-700 font-semibold">Creator Username</th>
+                        <th class="py-2 px-4 border-b text-left text-gray-700 font-semibold">Creation Time</th> <!-- New column for creation time -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <% tokens.forEach(token => { %>
+                        <tr>
+                            <td class="py-2 px-4 border-b text-gray-700">
+                                <%= token.token %> <!-- Display the token string -->
+                            </td>
+                            <td class="py-2 px-4 border-b text-gray-700">
+                                <%= token.creator.username %> <!-- Display the username of the token creator -->
+                            </td>
+                            <td class="py-2 px-4 border-b text-gray-700">
+                                <%= new Date(token.createdAt).toLocaleString() %> <!-- Format and display creation time -->
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</div>
+
+<script>
+    function generateToken() {
+        // Simulating token generation: Create a long token by concatenating three random strings
+        const token = 'TESTER-' + 
+                      Math.random().toString(36).substring(2, 14).toUpperCase() + 
+                      Math.random().toString(36).substring(2, 14).toUpperCase() + 
+                      Math.random().toString(36).substring(2, 14).toUpperCase();
+
+        // Display the generated token in the input field
+        document.getElementById('testerToken').value = token;
+
+        // Display the alert message
+        document.getElementById('token-alert').classList.remove('hidden');
+
+        // Submit the form (corrected to actually submit the form)
+        document.getElementById('generate-token-form').submit();
+    }
+</script>
+
+

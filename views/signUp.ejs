@@ -3,6 +3,10 @@
     <div class="loginCon bg-gray-600 w-1/2 h-auto p-8 rounded-lg shadow-md ">
         <h1 class="text-white text-2xl font-bold mb-4">Sign Up</h1>
         <form action="/users/signUp" method="POST">
+            <div id="availability-username" style="display:none; color: white; background-color: rgb(255, 37, 37); font-size: 16px; padding: 10px; border-radius: 5px; margin-top: 10px; font-weight: bold; text-align: center;"></div>
+            <div id="availability-email" style="display:none; color: white; background-color: rgb(255, 37, 37); font-size: 16px; padding: 10px; border-radius: 5px; margin-top: 10px; font-weight: bold; text-align: center;"></div>
+            <div id="availability-password" style="display:none; color: white; background-color: rgb(255, 37, 37); font-size: 16px; padding: 10px; border-radius: 5px; margin-top: 10px; font-weight: bold; text-align: center;"></div>
+
             <div class="mb-4">
                 <label for="username" class="text-white block font-semibold">Username</label>
                 <input type="text" id="username" name="username" class="w-full border-gray-300 rounded-md p-2" placeholder = '8-20 character' required>
@@ -24,9 +28,115 @@
                 <input type="text" id="testerToken" name="testerToken" class=" w-full border-gray-300 rounded-md p-2" placeholder = 'Got some restriction withuot Tester token'>
             </div>
             <div class="flex justify-end">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Submit</button>
+                <button id="submitBtn" type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">Submit</button>
             </div>
         </form>
     </div>
 </div>
+<script>
+    document.getElementById('username').addEventListener('input', function() {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.style.background = 'grey'
+
+        const username = this.value;
+        checkAvailability({ username });
+        
+        function checkAvailability(data) {
+        const url = '/users/signUp/check'; // Adjust this to your API route
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };        
+        
+        fetch(url, options)
+            .then(response => response.json())
+            .then(data => {
+                const alertDiv = document.getElementById('availability-username');
+                if (!data.success) {
+                    submitBtn.disabled = true;
+                    submitBtn.style.background = 'grey' 
+                    alertDiv.style.display = 'block';
+                    alertDiv.innerText = data.message;
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.style.background = '' 
+                    alertDiv.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+    });
+
+    document.getElementById('email').addEventListener('input', function() {
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.style.background = 'grey'
+
+        const email = this.value;
+        checkAvailability({ email });
+
+        function checkAvailability(data) {
+        const url = '/users/signUp/check'; // Adjust this to your API route
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };        
+        
+        fetch(url, options)
+            .then(response => response.json())
+            .then(data => {
+                const alertDiv = document.getElementById('availability-email');
+                if (!data.success) {
+                    submitBtn.disabled = true;
+                    submitBtn.style.background = 'grey'                    
+                    alertDiv.style.display = 'block';
+                    alertDiv.innerText = data.message;
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.style.background = '' 
+                    alertDiv.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+    });
+
+    document.getElementById('password').addEventListener('input', checkPasswords);
+    document.getElementById('passwordConfirm').addEventListener('input', checkPasswords);
+    function checkPasswords() {
+        const password = document.getElementById('password').value;
+        const passwordConfirm = document.getElementById('passwordConfirm').value;
+        const alertDiv = document.getElementById('availability-password');
+        
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.style.background = 'grey'
+
+        if (password === passwordConfirm && password !== '') {
+            // Passwords match
+            submitBtn.disabled = false;
+            submitBtn.style.background = '';  // Reset to default
+            alertDiv.style.display = 'none';  // Hide alert
+        } else {
+            // Passwords do not match
+            submitBtn.disabled = true;
+            submitBtn.style.background = 'grey';  // Grey out button
+            alertDiv.style.display = 'block';     // Show alert
+            alertDiv.innerText = 'Passwords do not match!';
+        }
+    }
+
+</script>
+
 
