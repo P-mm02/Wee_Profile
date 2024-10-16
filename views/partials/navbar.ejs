@@ -3,7 +3,7 @@
         <div class="flex justify-center ">
             <a href="/projectCard" class="text-lg font-bold">WeeProfile</a>
         </div>
-        <div class="flex justify-center ">
+        <div class="flex justify-center text-lg">
             <a href="/projectCard" class="px-4 py-4 hover:bg-gray-700 ">Home</a>
             <a href="/resume" class="px-4 py-4 hover:bg-gray-700">Resume</a>
             <a href="/reviews" class="px-4 py-4 hover:bg-gray-700">Reviews</a>            
@@ -15,7 +15,11 @@
             <a href="/users/login" class="px-4 py-4 hover:bg-gray-700">Login</a>
             <% } else { %>
             <div class="flex justify-center items-end flex-col">
-                <h1 class="text-lg">Username : <%= currentUser.username %></h2>
+                <h1 class="text-lg userDisCon">
+                    <span class="userDis" >Username: <%= currentUser.username.length > 16 ? currentUser.username.substring(0, 16) + '...' : currentUser.username %></span>
+                    <span class="userDisFull" ><%= currentUser.username %></span>
+                </h1>
+                
                 <h1 class="text-lg">Role : <%= currentUser.role %></h2> 
             </div>
             <form action="/users/logout" method="post">

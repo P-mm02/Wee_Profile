@@ -43,3 +43,13 @@ button:hover, a:hover {
         width: 30vw ;
     }           
 }
+
+.userDisFull {
+    display: none;
+}
+.userDisCon:hover .userDis {
+    display: none;
+}
+.userDisCon:hover .userDisFull {
+    display: block;
+}
