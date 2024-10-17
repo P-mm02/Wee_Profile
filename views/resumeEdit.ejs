@@ -1,6 +1,9 @@
 <% layout('layouts/boilerplate') %>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/style/resume.css">
+<!-- Sortable.js. This library provides easy-to-use drag-and-drop functionality with built-in support for handling reordering -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
 
 <form id="uploadForm" 
     <% if (resume.creator.role === 'Admin') { %>
@@ -146,7 +149,7 @@
                     </div>
                 </div>
                 <div class="language-section p-2 ">
-                    <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-4 mb-2">
                         <h1 class="text-2xl text-white ">Language Skills</h1>
                         <button type="button" class="bg-gray-400 rounded-md shadow-lg text-white text-2xl font-bold" style="width: 32px; height: 32px; position: relative;" onclick="addLanguage()">
                             <p style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);">+</p>
@@ -156,10 +159,7 @@
                         <% if (resume.languageSkill.length>0) { %>                                
                             <% resume.languageSkill.forEach((lang, index) => { %>
                                 <div class="langCon flex items-center space-x-2">
-                                    <div>
-                                        <% if (index === 0) { %>
-                                            <label for="language<%= index %>" class="block text-sm font-medium text-white">Language</label>
-                                        <% } %>
+                                    <div>                                        
                                         <div class="input-wrapper relative">
                                             <input 
                                             type="text" 
@@ -175,14 +175,11 @@
                                         </button>
                                         </div>                                        
                                     </div>
-                                    <div>
-                                        <% if (index === 0) { %>
-                                            <label class="block text-sm font-medium text-white">Rating</label>
-                                        <% } %>
+                                    <div>                                        
                                         <div class="battery-rating flex rounded-md overflow-hidden bg-white" style="border: 4px solid rgba(0, 0, 0, 0.8);">
                                             <% for (let i = 1; i <= 10; i++) { %>
                                                 <div 
-                                                    class="w-3 h-10 border border-gray-700 bg-gray-100 button battery-block
+                                                    class="w-3 h-10 border border-gray-700 bg-gray-800 button battery-block
                                                         <% if (lang.rating >= i) { %>
                                                             <%= i === 1 ? 'bg-red-700' : '' %>
                                                             <%= i === 2 ? 'bg-red-600' : '' %>
@@ -546,7 +543,7 @@
                     <div class="battery-rating flex rounded-md overflow-hidden bg-white" style="border: 4px solid rgba(0, 0, 0, 0.8);">
                     ${[...Array(10)].map((_, i) => `
                         <div 
-                            class="w-3 h-10 border border-gray-700 bg-gray-100 button battery-block"                            
+                            class="w-3 h-10 border border-gray-700 bg-gray-800 button battery-block"                            
                             data-rating="${i + 1}"
                             style="cursor: pointer;">
                         </div>
@@ -628,7 +625,32 @@
                 });
             }
         }
-    });    
+    });
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const languageSkillsContainer = document.getElementById('languageSkills');
+
+        Sortable.create(languageSkillsContainer, {
+            animation: 150,
+            handle: '.langCon',  // Ensure dragging is only triggered by this class
+            onEnd: (evt) => {
+                updateIndices();
+            }
+        });
+
+        function updateIndices() {
+            const languageItems = document.querySelectorAll('#languageSkills .langCon');
+            languageItems.forEach((item, index) => {
+                // Update the input names with new index after sorting
+                const languageInput = item.querySelector('input[name^="resume[languageSkill]"]');
+                const ratingInput = item.querySelector('input[type="hidden"]');
+                
+                languageInput.name = `resume[languageSkill][${index}][language]`;
+                ratingInput.name = `resume[languageSkill][${index}][rating]`;
+            });
+        }
+    });
+
 </script>
 <script>
     document.querySelectorAll('.battery-rating').forEach(ratingContainer => {
@@ -742,6 +764,31 @@
                 }
             }
         });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initialize Sortable on the job container
+        const lookingForCon = document.getElementById('lookingForCon');
+        
+        Sortable.create(lookingForCon, {
+            animation: 150,
+            handle: '.jobCon', // Only .jobCon elements are draggable
+            onEnd: function () {
+                // Reorder indices after moving an item
+                updateJobIndices();
+            }
+        });
+
+        function updateJobIndices() {
+            // Loop over all jobCon elements to update their index attributes
+            const jobEntries = lookingForCon.querySelectorAll('.jobCon');
+            jobEntries.forEach((job, index) => {
+                // Update position input name to match the new order
+                job.querySelector('input[name^="resume[lookingFor]["]').name = `resume[lookingFor][${index}][position]`;
+                job.querySelector('input[name^="resume[lookingFor]["]').id = `position-${index}`;
+            });
+        }
+    });
+
 </script>
 <script>
     window.onload = function() {
@@ -859,6 +906,30 @@
             }
         }
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const skillsContainer = document.getElementById('skillsContainer');
+        
+        Sortable.create(skillsContainer, {
+            animation: 150,
+            handle: '.skillCon', // Only the skillCon elements are draggable
+            onEnd: function (evt) {
+                // Reorder indices after moving an item
+                updateSkillIndices();
+            }
+        });
+
+        function updateSkillIndices() {
+            // Loop over all skillCon elements to update their index attributes
+            const skillEntries = skillsContainer.querySelectorAll('.skill-entry');
+            skillEntries.forEach((skill, index) => {
+                // Update skill and rating input names to match the new order
+                skill.querySelector('input[name^="resume[skills]["]').name = `resume[skills][${index}][skill]`;
+                skill.querySelector('input[name^="resume[skills]["][type="hidden"]').name = `resume[skills][${index}][rating]`;
+            });
+        }
+    });
+
 </script>
     
     

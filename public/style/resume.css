@@ -52,3 +52,12 @@
     border: 1px solid white;
     box-shadow: 0 0 2px rgba(255, 255, 255, 0.7);
 }
+
+/* Apply a grab cursor */
+.skillCon {
+    cursor: grab;
+}
+/* When dragging, show a closed-hand cursor */
+.skillCon:active {
+    cursor: grabbing;
+}
