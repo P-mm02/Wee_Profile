@@ -45,7 +45,19 @@ const ResumeSchema = new schema({
             position: String,
             description: String
         }
-    ],    
+    ],  
+    bootcamp: [
+        {   
+            bootcampName: String,
+            instructor: String,
+            certificate: String
+        }
+    ],  
+    hobbies: [
+        {   
+            hobby: String
+        }
+    ],  
     creator: {
         type: schema.Types.ObjectId,
         ref: 'User'

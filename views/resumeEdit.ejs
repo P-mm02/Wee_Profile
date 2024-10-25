@@ -12,313 +12,407 @@
         action="/resume?_method=PUT"
     <% } %>  
     method="POST" enctype="multipart/form-data" >
-    <section class="h-auto flex flex-col items-center justify-center py-8">    
-        <div id="resumeWrapper" class="resume-section grid grid-cols-3 bg-white shadow-lg " style="width: 794px; height: 1121px;">
-            <div class="left-section col-span-1 bg-gray-700 flex flex-col">                                    
-                <div class="profileImg-section slider-container relative overflow-hidden w-full" style="height: 33.33%;">
-                            <div class="slider flex transition-transform duration-500 ease-in-out w-full h-full" >
-                                <% if (resume.images.length>0) { %>
-                                    <% resume.images.forEach(img => { %>
-                                   <img src="<%= img.path %>" alt="<%= img._id %>" class="oldImg myProfileImgs w-full object-cover" style="height: 100%;">
-                                    <% }); %>
-                                <% } else { %>
-                                    <img src="https://res.cloudinary.com/di70a5gqx/image/upload/v1725698483/Resume/waxtyckb4h9cwuqps1bq.jpg" alt="" class="oldImg myProfileImgs w-full object-cover" style="height: 100%;">
-                                <% } %>                                
-                            </div>                        
-                            <button type="button" id="prevBtn" class="profileImgBtn h-full absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-4xl text-white p-8 ">
-                                &#10094;
+    <section class="h-auto flex flex-col items-center justify-center py-8">
+        <div class="flex items-center justify-center">
+            <div id="resumeWrapper" class="resume-section grid grid-cols-3 shadow-lg " style="width: 794px; height: 1121px; background-color: black;">
+                <div class="left-section col-span-1 bg-gray-700 flex flex-col">                                    
+                    <div class="profileImg-section slider-container relative overflow-hidden w-full" style="height: 33.33%;">
+                                <div class="slider flex transition-transform duration-500 ease-in-out w-full h-full" >
+                                    <% if (resume.images.length>0) { %>
+                                        <% resume.images.forEach(img => { %>
+                                       <img src="<%= img.path %>" alt="<%= img._id %>" class="oldImg myProfileImgs w-full object-cover" style="height: 100%;">
+                                        <% }); %>
+                                    <% } else { %>
+                                        <img src="https://res.cloudinary.com/di70a5gqx/image/upload/v1725698483/Resume/waxtyckb4h9cwuqps1bq.jpg" alt="" class="oldImg myProfileImgs w-full object-cover" style="height: 100%;">
+                                    <% } %>                                
+                                </div>                        
+                                <button type="button" id="prevBtn" class="profileImgBtn h-full absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-4xl text-white p-8 ">
+                                    &#10094;
+                                </button>
+                                <button type="button" id="nextBtn" class="profileImgBtn h-full absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-4xl text-white p-8 ">
+                                    &#10095;
+                                </button>
+                                <button type="button" id="deleteImgBtn"  class="absolute bottom-1 bg-red-500 text-white font-bold p-2 rounded-full" style="opacity: 0.75; right: 3.25rem">
+                                    🗑️
+                                </button>                    
+                                <button type="button" class="absolute bottom-1 bg-blue-500 rounded-full p-2 shadow-2xl hover:bg-blue-600 focus:outline-none" style="opacity: 0.75; right: 0.25rem">
+                                    <input type="file" name="profileImgs" id="profileImgs" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple>
+                                    <img src="/img/UploadIcon.png" alt="Upload" class="w-6 h-6 pb-1">
+                                </button>
+                                 
+                    </div>                      
+                    <div class="personalInfo-section mt-2">
+                        <div class="flex items-center p-2">
+                            <i class="fas fa-phone text-2xl text-green-500 mr-2 bg-white p-2 rounded-full"></i>
+                            <input 
+                                name="resume[phoneNumber]" 
+                                value="<%= resume.phoneNumber %>" 
+                                id="phone" type="tel" 
+                                placeholder="123-456-7890" 
+                                class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0" 
+                                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" oninput="formatPhoneNumber(this)" 
+                                maxlength="12" 
+                            />
+                        </div>
+                        <div class="flex items-center p-2">
+                            <i class="fas fa-envelope text-2xl text-green-500 mr-2 bg-white p-2 rounded-full"></i>
+                            <input 
+                                name="resume[email]" 
+                                value="<%= resume.email %>" 
+                                id="email" 
+                                type="email"  
+                                placeholder="example@example.com"  
+                                class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0" 
+                            />
+                        </div>
+                        <div class="flex items-center p-2">
+                            <i class="fab fa-github text-2xl text-green-500 mr-2 bg-white p-2 rounded-full"></i>
+                            <input 
+                                name="resume[gitHub]" 
+                                value="<%= resume.gitHub %>" 
+                                id="github" 
+                                type="text"
+                                placeholder="github.com/yourusername"
+                                class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0"
+                                pattern="github\.com/.*"  
+                            />
+                        </div>
+                        <div class="flex items-center p-2">
+                            <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(resume.address) %>" target="_blank" class="mr-2 bg-white p-2 rounded-xl border-2 border-red-500 shadow-lg flex button">
+                                <i class="fas fa-map-marker-alt text-2xl text-red-500"></i>
+                            </a>                                                                        
+                            <input 
+                                name="resume[address]" 
+                                value="<%= resume.address %>" 
+                                id="address" 
+                                type="text" 
+                                placeholder="Enter your address"  
+                                class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0"
+                            />
+                        </div>
+                                            
+                    </div>
+                    <div class="education-section px-2">
+                        <h1 class="text-2xl text-white">Education</h1>
+                        <div class="">
+                            <label for="institution" class="block text-sm font-medium text-white">Institution</label>
+                            <input 
+                                type="text" 
+                                name="resume[education][0][institution]" 
+                                id="institution" 
+                                placeholder="Enter the institution name" 
+                                class="inputBG block w-full rounded-md shadow-sm"
+                                <% if (resume.education[0]) { %>
+                                    value="<%= resume.education[0].institution %>"
+                                <% } %> 
+                                
+                            />
+                        </div>
+                        <div class="">
+                            <label for="major" class="block text-sm font-medium text-white">Major</label>
+                            <input 
+                                type="text" 
+                                name="resume[education][0][major]" 
+                                id="major" 
+                                placeholder="Enter the major" 
+                                class="inputBG block w-full rounded-md shadow-sm"
+                                <% if (resume.education[0]) { %>
+                                    value="<%= resume.education[0].major %>"
+                                <% } %> 
+                            />
+                        </div>
+                        <div class="">
+                            <label for="degree" class="block text-sm font-medium text-white">Degree</label>
+                            <input 
+                                type="text" 
+                                name="resume[education][0][degree]" 
+                                id="degree" 
+                                placeholder="Enter the degree" 
+                                class="inputBG block w-full rounded-md shadow-sm"
+                                <% if (resume.education[0]) { %>
+                                    value="<%= resume.education[0].degree %>"
+                                <% } %>
+                                
+                            />
+                        </div>
+                        <div class="">
+                            <label for="gradYear" class="block text-sm font-medium text-white">Graduation Year</label>
+                            <input 
+                                type="number" 
+                                name="resume[education][0][gradYear]" 
+                                id="gradYear" 
+                                placeholder="Enter the graduation year" 
+                                class="inputBG block w-full rounded-md shadow-sm"
+                                <% if (resume.education[0]) { %>
+                                    value="<%= resume.education[0].gradYear %>"
+                                <% } %> 
+                            />
+                        </div>
+                    </div>
+                    <div class="language-section p-2 ">
+                        <div class="flex items-center space-x-4 mb-2">
+                            <h1 class="text-2xl text-white ">Language Skills</h1>
+                            <button type="button" class="bg-gray-400 rounded-md shadow-lg text-white text-2xl font-bold" style="width: 32px; height: 32px; position: relative;" onclick="addLanguage()">
+                                <p style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);">+</p>
                             </button>
-                            <button type="button" id="nextBtn" class="profileImgBtn h-full absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-4xl text-white p-8 ">
-                                &#10095;
-                            </button>
-                            <button type="button" id="deleteImgBtn"  class="absolute bottom-1 bg-red-500 text-white font-bold p-2 rounded-full" style="opacity: 0.75; right: 3.25rem">
-                                🗑️
-                            </button>                    
-                            <button type="button" class="absolute bottom-1 bg-blue-500 rounded-full p-2 shadow-2xl hover:bg-blue-600 focus:outline-none" style="opacity: 0.75; right: 0.25rem">
-                                <input type="file" name="profileImgs" id="profileImgs" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple>
-                                <img src="/img/UploadIcon.png" alt="Upload" class="w-6 h-6 pb-1">
-                            </button>
-                             
-                </div>                      
-                <div class="personalInfo-section mt-2">
-                    <div class="flex items-center p-2">
-                        <i class="fas fa-phone text-2xl text-green-500 mr-2 bg-white p-2 rounded-full"></i>
-                        <input 
-                            name="resume[phoneNumber]" 
-                            value="<%= resume.phoneNumber %>" 
-                            id="phone" type="tel" 
-                            placeholder="123-456-7890" 
-                            class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0" 
-                            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" oninput="formatPhoneNumber(this)" 
-                            maxlength="12" 
-                        />
-                    </div>
-                    <div class="flex items-center p-2">
-                        <i class="fas fa-envelope text-2xl text-green-500 mr-2 bg-white p-2 rounded-full"></i>
-                        <input 
-                            name="resume[email]" 
-                            value="<%= resume.email %>" 
-                            id="email" 
-                            type="email"  
-                            placeholder="example@example.com"  
-                            class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0" 
-                        />
-                    </div>
-                    <div class="flex items-center p-2">
-                        <i class="fab fa-github text-2xl text-green-500 mr-2 bg-white p-2 rounded-full"></i>
-                        <input 
-                            name="resume[gitHub]" 
-                            value="<%= resume.gitHub %>" 
-                            id="github" 
-                            type="text"
-                            placeholder="github.com/yourusername"
-                            class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0"
-                            pattern="github\.com/.*"  
-                        />
-                    </div>
-                    <div class="flex items-center p-2">
-                        <a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(resume.address) %>" target="_blank" class="mr-2 bg-white p-2 rounded-xl border-2 border-red-500 shadow-lg flex button">
-                            <i class="fas fa-map-marker-alt text-2xl text-red-500"></i>
-                        </a>                                                                        
-                        <input 
-                            name="resume[address]" 
-                            value="<%= resume.address %>" 
-                            id="address" 
-                            type="text" 
-                            placeholder="Enter your address"  
-                            class="inputBG rounded-md w-full border-none focus:outline-none focus:ring-0"
-                        />
-                    </div>
-                                        
-                </div>
-                <div class="education-section px-2">
-                    <h1 class="text-2xl text-white">Education</h1>
-                    <div class="">
-                        <label for="institution" class="block text-sm font-medium text-white">Institution</label>
-                        <input 
-                            type="text" 
-                            name="resume[education][0][institution]" 
-                            id="institution" 
-                            placeholder="Enter the institution name" 
-                            class="inputBG block w-full rounded-md shadow-sm"
-                            <% if (resume.education[0]) { %>
-                                value="<%= resume.education[0].institution %>"
-                            <% } %> 
-                            
-                        />
-                    </div>
-                    <div class="">
-                        <label for="major" class="block text-sm font-medium text-white">Major</label>
-                        <input 
-                            type="text" 
-                            name="resume[education][0][major]" 
-                            id="major" 
-                            placeholder="Enter the major" 
-                            class="inputBG block w-full rounded-md shadow-sm"
-                            <% if (resume.education[0]) { %>
-                                value="<%= resume.education[0].major %>"
-                            <% } %> 
-                        />
-                    </div>
-                    <div class="">
-                        <label for="degree" class="block text-sm font-medium text-white">Degree</label>
-                        <input 
-                            type="text" 
-                            name="resume[education][0][degree]" 
-                            id="degree" 
-                            placeholder="Enter the degree" 
-                            class="inputBG block w-full rounded-md shadow-sm"
-                            <% if (resume.education[0]) { %>
-                                value="<%= resume.education[0].degree %>"
-                            <% } %>
-                            
-                        />
-                    </div>
-                    <div class="">
-                        <label for="gradYear" class="block text-sm font-medium text-white">Graduation Year</label>
-                        <input 
-                            type="number" 
-                            name="resume[education][0][gradYear]" 
-                            id="gradYear" 
-                            placeholder="Enter the graduation year" 
-                            class="inputBG block w-full rounded-md shadow-sm"
-                            <% if (resume.education[0]) { %>
-                                value="<%= resume.education[0].gradYear %>"
-                            <% } %> 
-                        />
-                    </div>
-                </div>
-                <div class="language-section p-2 ">
-                    <div class="flex items-center space-x-4 mb-2">
-                        <h1 class="text-2xl text-white ">Language Skills</h1>
-                        <button type="button" class="bg-gray-400 rounded-md shadow-lg text-white text-2xl font-bold" style="width: 32px; height: 32px; position: relative;" onclick="addLanguage()">
-                            <p style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);">+</p>
-                        </button>
-                    </div>
-                    <div id="languageSkills" class="flex flex-col space-y-2">
-                        <% if (resume.languageSkill.length>0) { %>                                
-                            <% resume.languageSkill.forEach((lang, index) => { %>
-                                <div class="langCon flex items-center space-x-2">
-                                    <div>                                        
-                                        <div class="input-wrapper relative">
-                                            <input 
-                                            type="text" 
-                                            name="resume[languageSkill][<%= index %>][language]" 
-                                            id="language<%= index %>" 
-                                            placeholder="language" 
-                                            class="inputBG block w-full rounded-md shadow-sm"
-                                            value="<%= lang.language %>"
-                                            data-index="<%= index %>"
-                                        />
-                                        <button type="button" class="delete-lang delete-btn text-white text-xs">
-                                            &#10006;
-                                        </button>
-                                        </div>                                        
-                                    </div>
-                                    <div>                                        
-                                        <div class="battery-rating flex rounded-md overflow-hidden bg-white" style="border: 4px solid rgba(0, 0, 0, 0.8);">
-                                            <% for (let i = 1; i <= 10; i++) { %>
-                                                <div 
-                                                    class="w-3 h-10 border border-gray-700 bg-gray-800 button battery-block
-                                                        <% if (lang.rating >= i) { %>
-                                                            <%= i === 1 ? 'bg-red-700' : '' %>
-                                                            <%= i === 2 ? 'bg-red-600' : '' %>
-                                                            <%= i === 3 ? 'bg-red-500' : '' %>
-                                                            <%= i === 4 ? 'bg-yellow-300' : '' %>
-                                                            <%= i === 5 ? 'bg-yellow-200' : '' %>
-                                                            <%= i === 6 ? 'bg-yellow-100' : '' %>
-                                                            <%= i === 7 ? 'bg-green-300' : '' %>
-                                                            <%= i === 8 ? 'bg-green-400' : '' %>
-                                                            <%= i === 9 ? 'bg-green-500' : '' %>
-                                                            <%= i === 10 ? 'bg-green-600' : '' %>
-                                                        <% } %>" 
-                                                    data-rating="<%= i %>">
-                                                </div>
-                                            <% } %>
+                        </div>
+                        <div id="languageSkills" class="flex flex-col space-y-2">
+                            <% if (resume.languageSkill.length>0) { %>                                
+                                <% resume.languageSkill.forEach((lang, index) => { %>
+                                    <div class="langCon flex items-center space-x-2">
+                                        <div>                                        
+                                            <div class="input-wrapper relative">
+                                                <input 
+                                                type="text" 
+                                                name="resume[languageSkill][<%= index %>][language]" 
+                                                id="language<%= index %>" 
+                                                placeholder="language" 
+                                                class="inputBG block w-full rounded-md shadow-sm"
+                                                value="<%= lang.language %>"
+                                                data-index="<%= index %>"
+                                            />
+                                            <button type="button" class="delete-lang delete-btn text-white text-xs">
+                                                &#10006;
+                                            </button>
+                                            </div>                                        
                                         </div>
-                                                                                
-                                        <input 
-                                            type="hidden" 
-                                            name="resume[languageSkill][<%= index %>][rating]" 
-                                            id="rating-hidden-<%= index %>" 
-                                            value="<%= lang.rating %>"
-                                        />
-                                    </div>
-                                </div>                                    
-                            <% }); %>
-                        <% } else { %>
-                            
-                        <% } %>
+                                        <div>                                        
+                                            <div class="battery-rating flex rounded-md overflow-hidden bg-white" style="border: 4px solid rgba(0, 0, 0, 0.8);">
+                                                <% for (let i = 1; i <= 10; i++) { %>
+                                                    <div 
+                                                        class="w-3 h-10 border border-gray-700 bg-gray-800 button battery-block
+                                                            <% if (lang.rating >= i) { %>
+                                                                <%= i === 1 ? 'bg-red-700' : '' %>
+                                                                <%= i === 2 ? 'bg-red-600' : '' %>
+                                                                <%= i === 3 ? 'bg-red-500' : '' %>
+                                                                <%= i === 4 ? 'bg-yellow-300' : '' %>
+                                                                <%= i === 5 ? 'bg-yellow-200' : '' %>
+                                                                <%= i === 6 ? 'bg-yellow-100' : '' %>
+                                                                <%= i === 7 ? 'bg-green-300' : '' %>
+                                                                <%= i === 8 ? 'bg-green-400' : '' %>
+                                                                <%= i === 9 ? 'bg-green-500' : '' %>
+                                                                <%= i === 10 ? 'bg-green-600' : '' %>
+                                                            <% } %>" 
+                                                        data-rating="<%= i %>">
+                                                    </div>
+                                                <% } %>
+                                            </div>
+                                                                                    
+                                            <input 
+                                                type="hidden" 
+                                                name="resume[languageSkill][<%= index %>][rating]" 
+                                                id="rating-hidden-<%= index %>" 
+                                                value="<%= lang.rating %>"
+                                            />
+                                        </div>
+                                    </div>                                    
+                                <% }); %>
+                            <% } else { %>
+                                
+                            <% } %>
+                        </div>
                     </div>
+                </div>
+                <div class="right-section col-span-2 flex flex-col" style="background-image: url(/img/background.jpg);background-size: cover; background-position: center; background-repeat: no-repeat;">
+                    <div class="name-section w-auto p-4">
+                        <input 
+                            name="resume[name]" 
+                            value="<%= resume.name %>" 
+                            id="nameInput" 
+                            type="text" 
+                            placeholder="Enter your name" 
+                            class="nameInput inputBG rounded-md w-full text-4xl font-bold"
+                            maxlength="50" 
+                        />
+                    </div>
+                    <div class="lookingFor-section px-4">
+                        <h2 class="block text-lg font-medium text-white font-bold">Looking for</h2>
+                        <div class="grid grid-cols-3 gap-x-2" id="lookingForCon">
+                            <% resume.lookingFor.forEach((job, index) => { %>
+                                <div class="jobCon input-wrapper relative">
+                                    <input 
+                                    type="text" 
+                                    name="resume[lookingFor][<%= index %>][position]" 
+                                    id="position-<%= index %>" 
+                                    value="<%= job.position %>" 
+                                    placeholder="Enter position" 
+                                    class="inputBG block w-full rounded-md shadow-sm font-bold"
+                                    >
+                                    <button type="button" class="delete-job delete-btn text-white text-xs">
+                                        &#10006;
+                                    </button>
+                                </div>                                                       
+                            <% }) %>
+                        
+                            <!-- Add more positions button -->
+                            <button id="addPositionBtn" type="button" class="flex justify-center items-center text-white text-xl py-2 rounded-md shadow-lg" style="background-color: rgb(59, 130, 246, 0.8);">Add</button>
+        
+                        </div>
+                    </div>
+                    <div class="introduction-section px-4 mt-2">
+                        <!-- Introduction field -->
+                        <label for="introduction" class="block text-lg font-medium text-white font-medium">Introduction</label>
+                        <textarea 
+                            name="resume[introduction]" 
+                            id="introduction" 
+                            rows="1" 
+                            placeholder="Write a brief introduction about yourself" 
+                            class="inputBG rounded-md w-full p-2 text-lg shadow-sm"
+                            maxlength="775"
+                            style="overflow: hidden; background-color: rgba(0, 0, 0, 0.5);"
+                            oninput="autoResize(this)"
+                        ><%= resume.introduction %></textarea>
+                    </div>
+                    <div class="skill-section px-4 mt-2">
+                        <div class="flex items-center space-x-2 pb-2">
+                            <h2 class="block text-lg font-medium text-white font-bold">Skills</h2>
+                            <button id="addSkillBtn" type="button" class="rounded-md shadow-lg text-white text-2xl font-bold" style="width: 32px; height: 32px; background-color: rgb(59, 130, 246, 0.7); position: relative;">
+                                <p style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);">+</p>
+                            </button>
+                        </div>
+                        <div id="skillsContainer" class="grid grid-cols-3 gap-2">
+                            <% resume.skills.forEach((skill, index) => { %>
+                                <div class="skill-entry skillCon input-wrapper relative">
+                                    <!-- Skill Name -->
+                                    <input 
+                                        type="text" 
+                                        name="resume[skills][<%= index %>][skill]" 
+                                        value="<%= skill.skill %>" 
+                                        placeholder="Enter skill" 
+                                        class="inputBG block w-full rounded-md shadow-sm font-bold"
+                                    >
+                                    <div class="grid grid-cols-10 battery-rating flex rounded-md overflow-hidden bg-white" style="border: 4px solid rgba(0, 0, 0, 0.8);">
+                                        <% for (let i = 1; i <= 10; i++) { %>
+                                            <div 
+                                                class="h-10 border border-gray-700 bg-gray-800 button battery-block
+                                                    <% if (skill.rating >= i) { %>
+                                                        <%= i === 1 ? 'bg-red-700' : '' %>
+                                                        <%= i === 2 ? 'bg-red-600' : '' %>
+                                                        <%= i === 3 ? 'bg-red-500' : '' %>
+                                                        <%= i === 4 ? 'bg-yellow-300' : '' %>
+                                                        <%= i === 5 ? 'bg-yellow-200' : '' %>
+                                                        <%= i === 6 ? 'bg-yellow-100' : '' %>
+                                                        <%= i === 7 ? 'bg-green-300' : '' %>
+                                                        <%= i === 8 ? 'bg-green-400' : '' %>
+                                                        <%= i === 9 ? 'bg-green-500' : '' %>
+                                                        <%= i === 10 ? 'bg-green-600' : '' %>
+                                                    <% } %>" 
+                                                data-rating="<%= i %>">
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                    <!-- Skill Rating -->
+                                    <input 
+                                        type="hidden" 
+                                        name="resume[skills][<%= index %>][rating]" 
+                                        value="<%= skill.rating %>" 
+                                        min="1" 
+                                        max="10" 
+                                        placeholder="Rating (0-5)" 
+                                        class="inputBG block w-full rounded-md shadow-sm mt-2"
+                                    >
+                                    <button type="button" class="delete-skill delete-btn text-white text-xs">
+                                        &#10006;
+                                    </button>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+                <div class="resumeAdditional-btn half-semicircle-btn" id="resumeAdditional-btn">
+                    <div class="triangle"></div>
                 </div>
             </div>
-            <div class="right-section col-span-2 flex flex-col" style="background-image: url(/img/background.jpg);background-size: cover; background-position: center; background-repeat: no-repeat;">
-                <div class="name-section w-auto p-4">
-                    <input 
-                        name="resume[name]" 
-                        value="<%= resume.name %>" 
-                        id="nameInput" 
-                        type="text" 
-                        placeholder="Enter your name" 
-                        class="nameInput inputBG rounded-md w-full text-4xl font-bold"
-                        maxlength="50" 
-                    />
-                </div>
-                <div class="lookingFor-section px-4">
-                    <h2 class="block text-lg font-medium text-white font-bold">Looking for</h2>
-                    <div class="grid grid-cols-3 gap-x-2" id="lookingForCon">
-                        <% resume.lookingFor.forEach((job, index) => { %>
-                            <div class="jobCon input-wrapper relative">
-                                <input 
-                                type="text" 
-                                name="resume[lookingFor][<%= index %>][position]" 
-                                id="position-<%= index %>" 
-                                value="<%= job.position %>" 
-                                placeholder="Enter position" 
-                                class="inputBG block w-full rounded-md shadow-sm font-bold"
-                                >
-                                <button type="button" class="delete-job delete-btn text-white text-xs">
-                                    &#10006;
-                                </button>
-                            </div>                                                       
-                        <% }) %>
-                    
-                        <!-- Add more positions button -->
-                        <button id="addPositionBtn" type="button" class="flex justify-center items-center text-white text-xl py-2 rounded-md shadow-lg" style="background-color: rgb(59, 130, 246, 0.8);">Add</button>
-    
-                    </div>
-                </div>
-                <div class="introduction-section px-4 mt-2">
-                    <!-- Introduction field -->
-                    <label for="introduction" class="block text-lg font-medium text-white font-medium">Introduction</label>
-                    <textarea 
-                        name="resume[introduction]" 
-                        id="introduction" 
-                        rows="1" 
-                        placeholder="Write a brief introduction about yourself" 
-                        class="inputBG rounded-md w-full p-2 text-lg shadow-sm"
-                        maxlength="750"
-                        style="overflow: hidden; background-color: rgba(0, 0, 0, 0.5);"
-                        oninput="autoResize(this)"
-                    ><%= resume.introduction %></textarea>
-                </div>
-                <div class="skill-section px-4 mt-2">
+            <div id="resumeAdditional" class="resume-Additional shadow-lg hidden" style="width: 794px; height: 1121px; background-color: black;">
+                <div class="bootcamp-section px-4 mt-4">
                     <div class="flex items-center space-x-2 pb-2">
-                        <h2 class="block text-lg font-medium text-white font-bold">Skills</h2>
-                        <button id="addSkillBtn" type="button" class="rounded-md shadow-lg text-white text-2xl font-bold" style="width: 32px; height: 32px; background-color: rgb(59, 130, 246, 0.7); position: relative;">
+                        <h2 class="block text-lg font-medium text-white font-bold">Bootcamp</h2>
+                        <button id="addBootcampBtn" type="button" class="rounded-md shadow-lg text-white text-2xl font-bold" style="width: 32px; height: 32px; background-color: rgb(59, 130, 246, 0.7); position: relative;">
                             <p style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);">+</p>
                         </button>
                     </div>
-                    <div id="skillsContainer" class="grid grid-cols-3 gap-2">
-                        <% resume.skills.forEach((skill, index) => { %>
-                            <div class="skill-entry skillCon input-wrapper relative">
-                                <!-- Skill Name -->
-                                <input 
-                                    type="text" 
-                                    name="resume[skills][<%= index %>][skill]" 
-                                    value="<%= skill.skill %>" 
-                                    placeholder="Enter skill" 
-                                    class="inputBG block w-full rounded-md shadow-sm font-bold"
-                                >
-                                <div class="grid grid-cols-10 battery-rating flex rounded-md overflow-hidden bg-white" style="border: 4px solid rgba(0, 0, 0, 0.8);">
-                                    <% for (let i = 1; i <= 10; i++) { %>
-                                        <div 
-                                            class="h-10 border border-gray-700 bg-gray-800 button battery-block
-                                                <% if (skill.rating >= i) { %>
-                                                    <%= i === 1 ? 'bg-red-700' : '' %>
-                                                    <%= i === 2 ? 'bg-red-600' : '' %>
-                                                    <%= i === 3 ? 'bg-red-500' : '' %>
-                                                    <%= i === 4 ? 'bg-yellow-300' : '' %>
-                                                    <%= i === 5 ? 'bg-yellow-200' : '' %>
-                                                    <%= i === 6 ? 'bg-yellow-100' : '' %>
-                                                    <%= i === 7 ? 'bg-green-300' : '' %>
-                                                    <%= i === 8 ? 'bg-green-400' : '' %>
-                                                    <%= i === 9 ? 'bg-green-500' : '' %>
-                                                    <%= i === 10 ? 'bg-green-600' : '' %>
-                                                <% } %>" 
-                                            data-rating="<%= i %>">
-                                        </div>
-                                    <% } %>
+                    <div id="bootcampContainer" class="space-y-4">
+                        <% resume.bootcamp.forEach((bootcamp, index) => { %>
+                            <div class="bootcamp-entry p-2 rounded-md bg-gray-900 text-white input-wrapper relative">
+                                <!-- Bootcamp Name -->
+                                <div class="mb-2">
+                                    <label for="bootcampName-<%= index %>" class="block text-sm font-medium">Bootcamp Name</label>
+                                    <input 
+                                        type="text" 
+                                        name="resume[bootcamp][<%= index %>][bootcampName]" 
+                                        value="<%= bootcamp.bootcampName %>" 
+                                        placeholder="Enter bootcamp name" 
+                                        class="inputBG block w-full rounded-md shadow-sm"
+                                        id="bootcampName-<%= index %>"
+                                    />
                                 </div>
-                                <!-- Skill Rating -->
-                                <input 
-                                    type="hidden" 
-                                    name="resume[skills][<%= index %>][rating]" 
-                                    value="<%= skill.rating %>" 
-                                    min="1" 
-                                    max="10" 
-                                    placeholder="Rating (0-5)" 
-                                    class="inputBG block w-full rounded-md shadow-sm mt-2"
-                                >
-                                <button type="button" class="delete-skill delete-btn text-white text-xs">
+                                <!-- Instructor Name -->
+                                <div class="mb-2">
+                                    <label for="instructor-<%= index %>" class="block text-sm font-medium">Instructor</label>
+                                    <input 
+                                        type="text" 
+                                        name="resume[bootcamp][<%= index %>][instructor]" 
+                                        value="<%= bootcamp.instructor %>" 
+                                        placeholder="Enter instructor name" 
+                                        class="inputBG block w-full rounded-md shadow-sm"
+                                        id="instructor-<%= index %>"
+                                    />
+                                </div>
+                                <!-- Certificate -->
+                                <% if (bootcamp.certificate) { %>
+                                    <div class="mb-2">
+                                        <label for="certificate-<%= index %>" class="block text-sm font-medium">Certificate</label>
+                                        <input 
+                                            type="text" 
+                                            name="resume[bootcamp][<%= index %>][certificate]" 
+                                            value="<%= bootcamp.certificate %>" 
+                                            placeholder="Enter certificate name" 
+                                            class="inputBG block w-full rounded-md shadow-sm"
+                                            id="certificate-<%= index %>"
+                                        />
+                                    </div>
+                                <% } %>
+                                
+                                <!-- Delete Button -->
+                                <button type="button" class="delete-bootcamp delete-btn text-white text-xs">
                                     &#10006;
                                 </button>
                             </div>
-                        <% }) %>
+                        <% }); %>
                     </div>
                 </div>
+                
+                <div class="hobby-section p-4">
+                    <div class="flex items-center space-x-2 pb-2">
+                        <h2 class="block text-lg font-medium text-white font-bold">Hobbies</h2>
+                        <button id="addHobbyBtn" type="button" class="rounded-md shadow-lg text-white text-2xl font-bold" style="width: 32px; height: 32px; background-color: rgb(59, 130, 246, 0.7); position: relative;">
+                            <p style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);">+</p>
+                        </button>
+                    </div>
+                    <div id="hobbyContainer" class="grid grid-cols-3 gap-2">
+                        <% if (resume.hobbies) { %>
+                            <% resume.hobbies.forEach((hobby, index) => { %>
+                                <div class="hobby-entry input-wrapper relative">
+                                    <input 
+                                        type="text" 
+                                        name="resume[hobbies][<%= index %>][hobby]" 
+                                        value="<%= hobby.hobby %>" 
+                                        placeholder="Enter hobby" 
+                                        class="inputBG block w-full rounded-md shadow-sm"
+                                    />
+                                    <button type="button" class="delete-hobby delete-btn text-white text-xs">
+                                        &#10006;
+                                    </button>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                        
+                    </div>
+                </div>
+                
             </div>
-        </div>
+        </div>    
+        
         <div class="processBtn-section mt-8 ">
             <button type="button" id="savePdfBtn" class="mx-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
                 Save as PDF
@@ -884,22 +978,18 @@
     });
 
     document.getElementById('skillsContainer').addEventListener('click', function(event) {
-    // Check if the clicked element has the class 'delete-lang'
         if (event.target && event.target.classList.contains('delete-skill')) {
-            // Find the closest parent element with the class 'langCon'
             const skillConTarget = event.target.closest('.skillCon');
             
             if (skillConTarget) {
-                skillConTarget.remove(); // Remove the .langCon element from the DOM
+                skillConTarget.remove();
 
-                const skillCons = document.querySelectorAll('.skillCon'); // Select all remaining language divs
+                const skillCons = document.querySelectorAll('.skillCon');
                 
-                skillCons.forEach((skillCon, newIndex) => {                
-                    // Update id and name for the language input
+                skillCons.forEach((skillCon, newIndex) => {
                     const skillInput = skillCon.querySelector('input[type="text"]');
                     skillInput.name = `resume[skills][${newIndex}][skill]`;               
-
-                    // Update id and name for the hidden rating input
+                    
                     const ratingInput = skillCon.querySelector('input[type="hidden"]');
                     ratingInput.name = `resume[skills][${newIndex}][rating]`;
                 });
@@ -931,9 +1021,181 @@
     });
 
 </script>
-    
-    
-    
+<script>
+    document.getElementById('addBootcampBtn').addEventListener('click', function() {
+        // Get the container where the bootcamp entries are stored
+        const bootcampContainer = document.getElementById('bootcampContainer');
+        
+        // Get the current number of bootcamp entries to generate unique IDs
+        const bootcampCount = bootcampContainer.children.length;
+
+        // Create a new bootcamp entry div
+        const bootcampEntry = document.createElement('div');
+        bootcampEntry.classList.add('bootcamp-entry', 'p-2', 'rounded-md', 'bg-gray-900', 'text-white', 'input-wrapper', 'relative');
+        
+        // Set the inner HTML for the new bootcamp entry
+        bootcampEntry.innerHTML = `
+            <!-- Bootcamp Name -->
+            <div class="mb-2">
+                <label for="bootcampName-${bootcampCount}" class="block text-sm font-medium">Bootcamp Name</label>
+                <input 
+                    type="text" 
+                    name="resume[bootcamp][${bootcampCount}][bootcampName]" 
+                    placeholder="Enter bootcamp name" 
+                    class="inputBG block w-full rounded-md shadow-sm"
+                />
+            </div>
+            <!-- Instructor Name -->
+            <div class="mb-2">
+                <label for="instructor-${bootcampCount}" class="block text-sm font-medium">Instructor</label>
+                <input 
+                    type="text" 
+                    name="resume[bootcamp][${bootcampCount}][instructor]" 
+                    placeholder="Enter instructor name" 
+                    class="inputBG block w-full rounded-md shadow-sm"
+                />
+            </div>
+            <!-- Certificate -->
+            <div class="mb-2">
+                <label for="certificate-${bootcampCount}" class="block text-sm font-medium">Certificate</label>
+                <input 
+                    type="text" 
+                    name="resume[bootcamp][${bootcampCount}][certificate]" 
+                    placeholder="Enter certificate name" 
+                    class="inputBG block w-full rounded-md shadow-sm"
+                />
+            </div>
+            <!-- Delete Button -->
+            <button type="button" class="delete-bootcamp delete-btn text-white text-xs">
+                &#10006;
+            </button>
+        `;
+
+        // Append the new entry to the bootcamp container
+        bootcampContainer.appendChild(bootcampEntry);            
+    });
+
+    document.getElementById('bootcampContainer').addEventListener('click', function(event) {
+        if (event.target && event.target.classList.contains('delete-bootcamp')) {
+            const bootcampTarget = event.target.closest('.bootcamp-entry');
+            
+            if (bootcampTarget) {
+                bootcampTarget.remove();
+
+                const bootcamps = document.querySelectorAll('.bootcamp-entry');
+                
+                bootcamps.forEach((bootcamp, newIndex) => {
+                    const bootcampName = bootcamp.querySelector('input[name*="[bootcampName]"]');
+                    bootcampName.name = `resume[bootcamp][${newIndex}][bootcampName]`;               
+                    
+                    const bootcampInstructor = bootcamp.querySelector('input[name*="[instructor]"]');
+                    bootcampInstructor.name = `resume[bootcamp][${newIndex}][instructor]`;
+
+                    const bootcampCertificate = bootcamp.querySelector('input[name*="[certificate]"]');
+                    bootcampCertificate.name = `resume[bootcamp][${newIndex}][certificate]`;
+                });
+            }
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const bootcampContainer = document.getElementById('bootcampContainer');
+        
+        Sortable.create(bootcampContainer, {
+            animation: 150,
+            handle: '.bootcamp-entry', // Only the skillCon elements are draggable
+            onEnd: function (evt) {
+                // Reorder indices after moving an item
+                updateBootcampIndices();
+            }
+        });
+
+        function updateBootcampIndices() {
+            // Loop over all skillCon elements to update their index attributes
+            const bootcampEntry = bootcampContainer.querySelectorAll('.bootcamp-entry');
+            bootcampEntry.forEach((bootcamp, index) => {
+                // Update skill and rating input names to match the new order
+                bootcamp.querySelector('input[name*="[bootcampName]"]').name = `resume[bootcamp][${index}][bootcampName]`;
+                bootcamp.querySelector('input[name*="[instructor]"]').name = `resume[bootcamp][${index}][instructor]`;
+                const certificate = bootcamp.querySelector('input[name*="[certificate]"]');
+                if (certificate) {
+                    certificate.name = `resume[bootcamp][${index}][certificate]`;
+                }
+            });
+        }
+    });
+</script>    
+<script>
+    document.getElementById('addHobbyBtn').addEventListener('click', function() {
+    const hobbyContainer = document.getElementById('hobbyContainer');
+    const index = hobbyContainer.children.length;
+    const hobbyEntry = document.createElement('div');
+    hobbyEntry.classList.add('hobby-entry', 'input-wrapper', 'relative');
+    hobbyEntry.innerHTML = `
+        <input 
+            type="text" 
+            name="resume[hobbies][${index}][hobby]" 
+            placeholder="Enter hobby" 
+            class="inputBG block w-full rounded-md shadow-sm"
+        />
+        <button type="button" class="delete-hobby delete-btn text-white text-xs">
+            &#10006;
+        </button>
+    `;
+    hobbyContainer.appendChild(hobbyEntry);
+   
+});
+
+    document.getElementById('hobbyContainer').addEventListener('click', function(event) {
+        if (event.target && event.target.classList.contains('delete-hobby')) {
+            const hobbyTarget = event.target.closest('.hobby-entry');
+            
+            if (hobbyTarget) {
+                hobbyTarget.remove();
+
+                const hobbys = document.querySelectorAll('.hobby-entry');
+                
+                hobbys.forEach((hobby, newIndex) => {
+                    const hobbyName = hobby.querySelector('input[name*="[hobby]"]');
+                    hobbyName.name = `resume[hobbies][${newIndex}][hobby]`;
+                });
+            }
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const hobbyContainer = document.getElementById('hobbyContainer');
+        
+        Sortable.create(hobbyContainer, {
+            animation: 150,
+            handle: '.hobby-entry', // Only the skillCon elements are draggable
+            onEnd: function (evt) {
+                // Reorder indices after moving an item
+                updateHobbyIndices();
+            }
+        });
+
+        function updateHobbyIndices() {
+            // Loop over all skillCon elements to update their index attributes
+            const hobbyEntry = hobbyContainer.querySelectorAll('.hobby-entry');
+            hobbyEntry.forEach((hobby, index) => {
+                // Update skill and rating input names to match the new order
+                hobby.querySelector('input[name^="resume[hobbies]["]').name = `resume[hobbies][${index}][hobby]`;
+            });
+        }
+    });
+</script>    
+<script>
+    document.getElementById('resumeAdditional-btn').addEventListener('click', function() {
+        const resumeAdditional = document.getElementById('resumeAdditional');
+        if (resumeAdditional.style.display === 'none' || resumeAdditional.style.display === '') {
+            resumeAdditional.style.display = 'block';
+        } else {
+            resumeAdditional.style.display = 'none';
+        }
+    });
+
+</script>    
     
 
 

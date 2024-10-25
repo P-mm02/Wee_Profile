@@ -61,3 +61,40 @@
 .skillCon:active {
     cursor: grabbing;
 }
+
+#resumeWrapper {
+    position: relative; /* To position the button relative to the resume section */
+}
+
+.half-semicircle-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 80px;
+    background-color: #1f2937; /* Dark color */
+    border-top-left-radius: 80px;
+    border-bottom-left-radius: 80px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    opacity: 0.75;    
+}
+
+.half-semicircle-btn:hover {
+    transform: translateX(10px); /* Slight movement on hover */
+    opacity: 1;
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.4);
+}
+
+.half-semicircle-btn .triangle {
+    width: 0;
+    height: 0;
+    border-left: 20px solid white; /* Right-facing triangle */
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+    margin: 5px;
+}
